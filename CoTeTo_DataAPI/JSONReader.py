@@ -27,4 +27,4 @@ def fetchData(uriList, systemCfg, generatorCfg, logger):
         else:
             jf[f] = None
             logger.error('JSONReader - file not readable %s', f)
-    return {'json_files': jf}
+    return {'files': jf}
