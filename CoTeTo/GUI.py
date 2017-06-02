@@ -7,7 +7,7 @@
 import sys, os, os.path, tempfile, argparse, logging, configparser
 import CoTeTo
 from CoTeTo.Controller import Controller
-from PyQt4 import QtCore, QtGui, uic
+from PyQt5 import QtCore, QtWidgets, QtGui, uic
 
 descr = """
 CoTeTo is a tool to generate source code from data sources.
@@ -69,9 +69,9 @@ class XStream(QtCore.QObject):
             sys.stdout = XStream._ostderr
 
 
-class LogViewer(QtGui.QWidget):
+class LogViewer(QtWidgets.QWidget):
     def __init__(self, resPath, *arg, **kwarg):
-        QtGui.QWidget.__init__(self)
+        QtWidgets.QWidget.__init__(self)
         # load the ui
         self.ui = uic.loadUi(os.path.join(resPath, 'MessageBrowser.ui'), self)
         XStream.stdout().messageWritten.connect(self.textBrowser.insertPlainText)
@@ -93,19 +93,19 @@ class LogViewer(QtGui.QWidget):
         self.textBrowser.clear()
 
     def saveLog(self):
-        f = QtGui.QFileDialog.getSaveFileName(self, 'Select Output File', '*')
+        f = QtWidgets.QFileDialog.getSaveFileName(self, 'Select Output File', '*')
         if not f:
             return
         try:
             open(f, 'w').write(self.textBrowser.toPlainText())
         except Exception as e:
-            QtGui.QMessageBox.critical(self, 'Error during save', 'Message log could not be saved!')
+            QtWidgets.QMessageBox.critical(self, 'Error during save', 'Message log could not be saved!')
             self.logger.exception('Could not save message log')
 
 
-class CoTeToWidget(QtGui.QWidget):
+class CoTeToWidget(QtWidgets.QWidget):
     def __init__(self, app, resPath, cfg, *arg, **kwarg):
-        QtGui.QWidget.__init__(self)
+        QtWidgets.QWidget.__init__(self)
         self.app = app
         # load the Icons
         sys.path.insert(0, resPath)
@@ -172,13 +172,13 @@ class CoTeToWidget(QtGui.QWidget):
             print('Unknown URL scheme:', url)
 
     def getUriList(self):
-        flist = QtGui.QFileDialog.getOpenFileNames(self, 'Select Data Sources')
+        flist = QtWidgets.QFileDialog.getOpenFileNames(self, 'Select Data Sources')
 
         if flist:
             self.uriInput.setText(', '.join(flist))
 
     def getOutputFile(self):
-        f = QtGui.QFileDialog.getSaveFileName(self, 'Select Output File', '*')
+        f = QtWidgets.QFileDialog.getSaveFileName(self, 'Select Output File', '*')
         if f:
             self.outputInput.setText(f)
 
@@ -305,7 +305,7 @@ def main():
     # http://stackoverflow.com/questions/779495/python-access-data-in-package-subdirectory
     resPath = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'res')
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     mw = CoTeToWidget(app, resPath, cfg, generatorPath, logLevel=logLevel)
     mw.show()
     r = app.exec_()
