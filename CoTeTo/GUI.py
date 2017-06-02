@@ -121,6 +121,8 @@ class CoTeToWidget(QtWidgets.QWidget):
             self.logView = LogViewer(resPath, *arg, **kwarg)
             self.coTeToMainView.addTab(self.logView, 'Messages')
             kwarg['logHandler'] = self.logView.logHandler
+        # get the logger
+        self.logger = logging.getLogger('CoTeTo')
 
         # replace systems exception hook
         sys.excepthook = self.exceptionHook
@@ -164,7 +166,13 @@ class CoTeToWidget(QtWidgets.QWidget):
     # general methods
     def exceptionHook(self, t, v, tb):
         """Show unhandled exceptions"""
-        print(''.join(traceback.format_exception(t, v, tb)))
+        msg = ''.join(traceback.format_exception(t, v, tb))
+        self.logger.critical('An unhandled exception occured')
+        print('*'*40)
+        print(msg, )
+        print('*'*40)
+        QtWidgets.QMessageBox.critical(self, 'An unhandled exception occured',
+            'Please have a look at the <b>Messages</b> tab for details!')
 
     def openURL(self, url):
         """open an link target from the generator or api view"""
