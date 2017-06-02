@@ -94,10 +94,10 @@ class LogViewer(QtWidgets.QWidget):
 
     def saveLog(self):
         f = QtWidgets.QFileDialog.getSaveFileName(self, 'Select Output File', '*')
-        if not f:
+        if not (f and f[0]):
             return
         try:
-            open(f, 'w').write(self.textBrowser.toPlainText())
+            open(f[0], 'w').write(self.textBrowser.toPlainText())
         except Exception as e:
             QtWidgets.QMessageBox.critical(self, 'Error during save', 'Message log could not be saved!')
             self.logger.exception('Could not save message log')
@@ -173,14 +173,13 @@ class CoTeToWidget(QtWidgets.QWidget):
 
     def getUriList(self):
         flist = QtWidgets.QFileDialog.getOpenFileNames(self, 'Select Data Sources')
-
-        if flist:
-            self.uriInput.setText(', '.join(flist))
+        if flist and flist[0]:
+            self.uriInput.setText(', '.join(flist[0]))
 
     def getOutputFile(self):
         f = QtWidgets.QFileDialog.getSaveFileName(self, 'Select Output File', '*')
-        if f:
-            self.outputInput.setText(f)
+        if f and f[0]:
+            self.outputInput.setText(f[0])
 
     # API methods
     def activateAPI(self):
@@ -192,7 +191,8 @@ class CoTeToWidget(QtWidgets.QWidget):
 
     # generator methods
     def exploreGenerators(self):
-        QtGui.QDesktopServices.openUrl(QtCore.QUrl.fromLocalFile(self.ctt.generatorPath))
+        for p in self.ctt.generatorPath:
+            QtGui.QDesktopServices.openUrl(QtCore.QUrl.fromLocalFile(p))
 
     def updateGeneratorList(self, rescan=True):
         # get old selection
