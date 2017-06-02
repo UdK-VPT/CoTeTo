@@ -4,7 +4,7 @@
 # 201500225 Joerg Raedler jraedler@udk-berlin.de
 #
 
-import sys, os, os.path, tempfile, argparse, logging, configparser
+import sys, os, os.path, tempfile, argparse, logging, configparser, traceback
 import CoTeTo
 from CoTeTo.Controller import Controller
 from PyQt5 import QtCore, QtWidgets, QtGui, uic
@@ -102,23 +102,29 @@ class LogViewer(QtWidgets.QWidget):
             QtWidgets.QMessageBox.critical(self, 'Error during save', 'Message log could not be saved!')
             self.logger.exception('Could not save message log')
 
-
 class CoTeToWidget(QtWidgets.QWidget):
     def __init__(self, app, resPath, cfg, *arg, **kwarg):
         QtWidgets.QWidget.__init__(self)
         self.app = app
+
         # load the Icons
         sys.path.insert(0, resPath)
         import Icons_rc
+
         # load the ui
         self.ui = uic.loadUi(os.path.join(resPath, 'CoTeTo-GUI.ui'), self)
         self.setWindowTitle('CoTeTo GUI | Version: %s' % (CoTeTo.__version__))
         self.cfg = cfg
+
         # create a logView?
         if 'logLevel' in kwarg and kwarg['logLevel'] > 0:
             self.logView = LogViewer(resPath, *arg, **kwarg)
             self.coTeToMainView.addTab(self.logView, 'Messages')
             kwarg['logHandler'] = self.logView.logHandler
+
+        # replace systems exception hook
+        sys.excepthook = self.exceptionHook
+
         # create a controller
         self.ctt = Controller(*arg, **kwarg)
         # apis
@@ -156,6 +162,10 @@ class CoTeToWidget(QtWidgets.QWidget):
 
 
     # general methods
+    def exceptionHook(self, t, v, tb):
+        """Show unhandled exceptions"""
+        print(''.join(traceback.format_exception(t, v, tb)))
+
     def openURL(self, url):
         """open an link target from the generator or api view"""
         scheme = url.scheme()
@@ -282,7 +292,7 @@ def main():
     # first read config file for default values
     defaults = {
         'GeneratorPath': os.environ.get('COTETO_GENERATORS', ''),
-        'LogLevel' : '0',
+        'LogLevel' : '2',
     }
     cfg = configparser.ConfigParser(defaults)
     homeVar = {'win32':'USERPROFILE', 'linux':'HOME', 'linux2':'HOME', 'darwin':'HOME'}.get(sys.platform)
