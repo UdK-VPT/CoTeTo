@@ -168,9 +168,7 @@ class CoTeToWidget(QtWidgets.QWidget):
         """Show unhandled exceptions"""
         msg = ''.join(traceback.format_exception(t, v, tb))
         self.logger.critical('An unhandled exception occured')
-        print('*'*40)
-        print(msg, )
-        print('*'*40)
+        print('*'*40+'\n'+msg+'*'*40)
         QtWidgets.QMessageBox.critical(self, 'An unhandled exception occured',
             'Please have a look at the <b>Messages</b> tab for details!')
 
