@@ -8,11 +8,7 @@ import sys, os, os.path, zipfile, logging
 from mako.template import Template
 import CoTeTo
 from CoTeTo.Generator import Generator
-
-if CoTeTo.py27:
-    from urllib import pathname2url
-else: # py33
-    from urllib.request import pathname2url
+from urllib.request import pathname2url
 
 # a template for the api info text as txt and html
 apiInfoTmpl = {
@@ -55,8 +51,6 @@ class Controller(object):
         self.logger.info('Starting CoTeTo.Controller from file %s, version %s', __file__, CoTeTo.__version__)
         # create system configuration dict - will be available to subsystems
         self.systemCfg = {
-            'py27': CoTeTo.py27,
-            'py33': CoTeTo.py33,
             'platform': sys.platform,
             'version': CoTeTo.__version__,
             # need more here?

@@ -91,7 +91,7 @@ class LogViewer(QtGui.QWidget):
 
     def clearLog(self):
         self.textBrowser.clear()
-        
+
     def saveLog(self):
         f = QtGui.QFileDialog.getSaveFileName(self, 'Select Output File', '*')
         if not f:
@@ -153,7 +153,7 @@ class CoTeToWidget(QtGui.QWidget):
                     i.setSelected(1)
                     break
         # end of preferences
-    
+
 
     # general methods
     def openURL(self, url):
@@ -175,8 +175,6 @@ class CoTeToWidget(QtGui.QWidget):
         flist = QtGui.QFileDialog.getOpenFileNames(self, 'Select Data Sources')
 
         if flist:
-            if CoTeTo.py27:
-                flist = [unicode(f) for f in flist]
             self.uriInput.setText(', '.join(flist))
 
     def getOutputFile(self):
@@ -189,8 +187,6 @@ class CoTeToWidget(QtGui.QWidget):
         items = self.apiList.selectedItems()
         if items:
             api = items[0].text()
-            if CoTeTo.py27:
-                api = unicode(api)
         self.apiView.clear()
         self.apiView.setText(self.ctt.apiInfoText(api, 'html'))
 
@@ -204,8 +200,6 @@ class CoTeToWidget(QtGui.QWidget):
         selected = None
         if selItems:
             selected = selItems[0].text()
-            if CoTeTo.py27:
-                selected = unicode(selected)
         if rescan:
             self.ctt.rescanGenerators()
         self.generatorList.clear()
@@ -213,7 +207,7 @@ class CoTeToWidget(QtGui.QWidget):
         for n in sorted(self.ctt.generators):
             self.generatorList.addItem(n)
             if n == selected:
-                # select previously selected generator 
+                # select previously selected generator
                 self.generatorList.item(i).setSelected(True)
             i += 1
         if not self.generatorList.selectedItems():
@@ -224,8 +218,6 @@ class CoTeToWidget(QtGui.QWidget):
         sel = self.generatorList.selectedItems()
         if sel:
             gen = sel[0].text()
-            if CoTeTo.py27:
-                gen = unicode(gen)
         else:
             return
         self.activeGenerator = self.ctt.generators[gen]
@@ -234,8 +226,6 @@ class CoTeToWidget(QtGui.QWidget):
 
     def executeGenerator(self):
         line = self.uriInput.text()
-        if CoTeTo.py27:
-            line = unicode(line)
         uriList = [u.strip() for u in line.split(',')]
         outputFile = str(self.outputInput.text())
         if not outputFile:
@@ -256,17 +246,11 @@ class CoTeToWidget(QtGui.QWidget):
         # save preferences to config file
         if hasattr(self.cfg, 'path'):
             uriList = self.uriInput.text()
-            if CoTeTo.py27:
-                uriList = unicode(uriList)
             outputFile = self.outputInput.text()
-            if CoTeTo.py27:
-                outputFile = unicode(outputFile)
             generator = ''
             tmp = self.generatorList.selectedItems()
             if tmp:
                 generator = tmp[0].text()
-                if CoTeTo.py27:
-                    generator = unicode(generator)
             try:
                 c = self.cfg
                 p = 'PREFERENCES'

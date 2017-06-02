@@ -3,7 +3,6 @@ CoTeTo - Code Templating Tool
 =============================
 
 CoTeTo is a tool for the generation of (Modelica) source  code.
-It is part of the research project EnEff-BIM.
 
 This software is work-in-progress.
 Documentation will be incomplete or missing and the software may not run properly.
@@ -24,14 +23,11 @@ Data APIs are python modules loaded from the module package `CoTeTo_DataAPI`.
 
 Dependencies
 ------------
-1. CoTeTo works with vanilla Python 32bit or 64bit version >=3.3 or >=2.7.10 plus some packages listed below,
-but the `libSimModel` API is currently only compatible to Python 3.4 in 32bit.  
-[WinPython](http://winpython.github.io/) (v3.4, 32bit, pyQT4) is recommended,
-because it includes most packages.
+1. CoTeTo works with vanilla Python 32bit or 64bit version >=3.5 .
+[WinPython](http://winpython.github.io/) is recommended, because it includes most packages.
 3. WinPython does not include the Mako templating engine,
 install it by running `pip install -U mako` on a Python-enabled command prompt
 4. If you are not using WinPython, you also need to install the Jinja2 templating engine by running `pip install -U jinja2` on a Python-enabled command prompt
-5. If you are using Python 2.7 you will also have to install configparser by running `pip install -U configparser` on a Python-enabled command prompt
 
 You can check these dependencies by running the script
 `tools/dependency_check.py` if you already have a python interpreter installed.

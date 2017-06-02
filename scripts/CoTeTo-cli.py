@@ -2,7 +2,7 @@
 #-*- coding:utf-8 -*-
 #
 # This file is part of CoTeTo - a code generation tool
-# 201500225 Joerg Raedler jraedler@udk-berlin.de
+# 20170602 Joerg Raedler jraedler@udk-berlin.de
 #
 
 import os, sys
