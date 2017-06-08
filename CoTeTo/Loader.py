@@ -5,13 +5,18 @@
 #
 
 class Loader(object):
-    """base class for a data loader in CoTeTo"""
+    name = 'Loader'
+    description = 'Abstract loader class for CoTeTo - should not be used directly.'
+    version = '1.0'
+    author = 'Joerg Raedler jraedler@udk-berlin.de'
+    helptxt = """This is just an abstract class, real loaders should reimplement setup() and load()"""
+
 
     def __init__(self, systemCfg, generatorCfg, logger):
         self.systemCfg = systemCfg
         self.generatorCfg = generatorCfg
         self.logger = logger
-        self.logger.debug('LDR | creating instance of loader')
+        self.logger.debug('LDR | creating instance of loader %s' % self.name)
         try:
             self.setup()
         except:
@@ -30,7 +35,7 @@ class Loader(object):
 
     def execute(self, uriList):
         try:
-            self.load(uriList)
+            return self.load(uriList)
         except:
             self.logger.exception('LDR | error during execution/load')
 
