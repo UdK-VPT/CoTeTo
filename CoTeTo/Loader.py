@@ -34,6 +34,7 @@ class Loader(object):
 
 
     def execute(self, uriList):
+        self.logger.debug('LDR | executing loader %s with uriList: %s' % (self.name, uriList))
         try:
             return self.load(uriList)
         except:
