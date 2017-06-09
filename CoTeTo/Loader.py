@@ -4,6 +4,33 @@
 # 20170608 Joerg Raedler jraedler@udk-berlin.de
 #
 
+from string import Template
+from urllib.request import pathname2url
+
+# a template for the loader info text as txt and html
+loaderInfoTmpl = {
+    'txt' : """
+Name:        ${name}
+Description: ${description}
+Version:     ${version}
+Author:      ${author}
+Path:        ${filename}
+""",
+    'html' : """
+<h2>${name} - version ${version}</h2>
+<h3>Author</h3>
+<p>${author}</p>
+<h3>Description</h3>
+<p>${description}</p>
+<h3>Path</h3>
+<p><a href="file:${fileurl}">${filename}</a></p>
+
+<h3>Help</h3>
+<p>${helptxt}</p>
+"""
+}
+
+
 class Loader(object):
     name = 'Loader'
     description = 'Abstract loader class for CoTeTo - should not be used directly.'
@@ -41,4 +68,11 @@ class Loader(object):
             self.logger.exception('LDR | error during execution/load')
 
     # make class callable
-    __exec__ = execute
+    __call__ = execute
+
+
+    def infoText(self, fmt='txt'):
+        """return information on this loader in text form"""
+        t = Template(generatorInfoTmpl[fmt])
+        return t.substitute(name=self.name, description=self.description, author=self.author, version=self.version,
+                            helptxt=self.helptxt, filename=__file__, fileurl=pathname2url(__file__))

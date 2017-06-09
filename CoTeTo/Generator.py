@@ -113,14 +113,15 @@ class Generator(object):
         self.description = g.get('description')
 
         # check for a usable api
-        acfg = self.cfg['API']
-        self.api = None
-        self.logger.debug('GEN | locate API')
-        for api in self.controller.apis.values():
-            if acfg.get('name') == api.name:
-                if (acfg.get('minVer', '000') <= api.version) and (acfg.get('maxVer', '999999') >= api.version):
-                    self.logger.debug('GEN | found API: %s::%s', api.name, api.version)
-                    self.api = api
+        lcfg = self.cfg['LOADER']
+        self.loader = None
+        self.logger.debug('GEN | locate loader')
+        # FIXME: check for local loader class
+        for loader in self.controller.loaders.values():
+            if lcfg.get('name') == loader.name:
+                if (lcfg.get('minVer', '000') <= loader.version) and (lcfg.get('maxVer', '999999') >= loader.version):
+                    self.logger.debug('GEN | found loader: %s::%s', loader.name, loader.version)
+                    self.loader = loader
 
     def infoText(self, fmt='txt'):
         """return information on this generator in text form"""
@@ -143,13 +144,6 @@ class Generator(object):
             s = open(os.path.join(self.packagePath, folder, name), 'r').read()
         return s
 
-    def getMappingRules(self):
-        """return list of files to read mapping rules from"""
-        if self.cfg.has_section('MAPRULES'):
-            return [self.getReadableFile(f, 'MappingRules') for f in self.cfg['MAPRULES'].get('files', '').split(',') if f]
-        else:
-            return []
-
     def getTemplateFolder(self):
         """return template folder, for zip packages extract to temporary folder first"""
         if not self.zf:
@@ -164,11 +158,11 @@ class Generator(object):
             f.close()
         return self.tempDir.name
 
-    def executeDataAPI(self, uriList=[]):
-        """execute the dataAPI to fetch data from the source"""
-        self.logger.debug('GEN | calling data api')
-        self.data = self.api.fetchData(uriList, self.controller.systemCfg,
-            self.cfg, self.logger)
+    def executeLoader(self, uriList=[]):
+        """execute the loader to fetch data from the source"""
+        self.logger.debug('GEN | calling loader')
+        l = self.loader(self.controller.systemCfg, self.cfg, self.logger)
+        self.data = l(uriList)
 
     def executePyFilter(self):
         """execute the python filter to manipulate loaded data"""
@@ -191,8 +185,8 @@ class Generator(object):
                 self.cfg['TEMPLATES'].get('topFile'),
                 lookup=tLookup, strict_undefined=True)
             buf = StringIO()
-            ctx = Context(buf, _systemCfg=self.controller.systemCfg,
-                _generatorCfg=self.cfg, _logger=self.logger, **self.data)
+            ctx = Context(buf, data=self.data, systemCfg=self.controller.systemCfg,
+                generatorCfg=self.cfg, logger=self.logger)
             template.render_context(ctx)
             buf.flush()
             buf.seek(0)
@@ -211,10 +205,10 @@ class Generator(object):
             raise Exception('Unknown template system: '+tmplType)
 
     def execute(self, uriList=[]):
-        if not self.api:
+        if not self.loader:
             raise Exception('Generator is not valid - canceling execution!')
-        # fill data model from the api using the data URIs
-        self.executeDataAPI(uriList)
+        # fill data model from the loader using the data URIs
+        self.executeLoader(uriList)
         # apply filter
         if self.cfg.has_section('PYFILTER'):
             self.executePyFilter()

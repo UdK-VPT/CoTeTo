@@ -19,7 +19,7 @@ class TextFile(Loader):
             if isfile(u):
                 self.logger.info('TextFile - loading %s', u)
                 with open(u, 'r') as f:
-                    data[u] = f.readlines()
+                    data[u] = f.read().splitlines()
             else:
                 data[u] = None
                 self.logger.error('TextFile - file not readable %s', u)

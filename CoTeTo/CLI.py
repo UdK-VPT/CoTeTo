@@ -21,16 +21,15 @@ def main():
     grp = parser.add_argument_group('path settings')
     grp.add_argument('-p', '--search-path', metavar='PATH', help='search path for generators (separated by ;)')
     grp = parser.add_argument_group('general information')
-    grp.add_argument('-a', '--list-apis', action='store_true', help='list available data APIs')
+    grp.add_argument('-a', '--list-loaders', action='store_true', help='list available loaders')
     grp.add_argument('-l', '--list-generators', action='store_true', help='list available code generators')
     grp.add_argument('-d', '--debug', metavar='LEVEL', help='set debug level to show on stderr (1...5)')
     grp = parser.add_argument_group('generator actions')
     grp.add_argument('-g', '--generator', metavar='GEN', nargs=1, help='select generator GEN (needed for the following actions)')
     grp.add_argument('-o', '--output', metavar='FILE', nargs=1, help='use FILE for output instead of stdout')
-    grp.add_argument('-m', '--mapping-rules', action='store_true', help='extract mapping rules to stdout (needs -g)')
     grp.add_argument('-s', '--show-generator', action='store_true', help='show information on generator (needs -g)')
     grp.add_argument('data_source', metavar='dataSource', type=str, default='', nargs='*',
-                        help='execute the generator with these data source URIs passed to the data API (needs -g)')
+                        help='execute the generator with these data source URIs passed to the loader (needs -g)')
     args = parser.parse_args()
 
     # first read config file for default values
@@ -54,10 +53,10 @@ def main():
     # create teh controller
     ctt = Controller(generatorPath, logLevel=logLevel)
 
-    if args.list_apis:
-        for n in sorted(ctt.apis):
-            a = ctt.apis[n]
-            print('%s%s (%s):%s\t%s' % (nl, n, a.author, nl, a.description))
+    if args.list_loaders:
+        for n in sorted(ctt.loaders):
+            l = ctt.loaders[n]
+            print('%s%s (%s):%s\t%s' % (nl, n, l.author, nl, l.description))
         print()
         return 0
     elif args.list_generators:
@@ -82,11 +81,6 @@ def main():
     if args.show_generator:
         # FIXME
         print(g.infoText('txt'))
-        return 0
-    elif args.mapping_rules:
-        for f in g.getMappingRules():
-            outFile.write(f.read())
-            f.close()
         return 0
     elif args.data_source:
         outFile.write(g.execute(args.data_source).read())
