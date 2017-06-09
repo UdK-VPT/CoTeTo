@@ -8,4 +8,4 @@
 # specify the name of the MODULE (filename without .py)
 # the Loaders name (name = ...) may be different!
 
-__all__ = ['JSONFile']
+__all__ = ['TextFile', 'CSVFile', 'JSONFile']
