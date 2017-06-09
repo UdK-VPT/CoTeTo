@@ -204,9 +204,9 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="apiTab">
+     <widget class="QWidget" name="loaderTab">
       <attribute name="title">
-       <string>Data APIs</string>
+       <string>Data Loaders</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
@@ -214,8 +214,8 @@
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
-         <widget class="QListWidget" name="apiList"/>
-         <widget class="QTextBrowser" name="apiView">
+         <widget class="QListWidget" name="loaderList"/>
+         <widget class="QTextBrowser" name="loaderView">
           <property name="minimumSize">
            <size>
             <width>500</width>

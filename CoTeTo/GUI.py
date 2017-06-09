@@ -129,12 +129,12 @@ class CoTeToWidget(QtWidgets.QWidget):
 
         # create a controller
         self.ctt = Controller(*arg, **kwarg)
-        # apis
-        self.apiList.itemSelectionChanged.connect(self.activateAPI)
-        self.apiView.anchorClicked.connect(self.openURL)
-        for a in sorted(self.ctt.apis):
-            self.apiList.addItem(a)
-        self.apiList.item(0).setSelected(True)
+        # loaders
+        self.loaderList.itemSelectionChanged.connect(self.activateLoader)
+        self.loaderView.anchorClicked.connect(self.openURL)
+        for a in sorted(self.ctt.loaders):
+            self.loaderList.addItem(a)
+        self.loaderList.item(0).setSelected(True)
 
         # generators
         self.activeGenerator=None
@@ -173,16 +173,16 @@ class CoTeToWidget(QtWidgets.QWidget):
             'Please have a look at the <b>Messages</b> tab for details!')
 
     def openURL(self, url):
-        """open an link target from the generator or api view"""
+        """open an link target from the generator or loader view"""
         scheme = url.scheme()
         if scheme == 'file':
             # print(url)
             QtGui.QDesktopServices.openUrl(url)
-        elif scheme == 'api':
+        elif scheme == 'loader':
             a = url.authority().replace('___', '::').lower()
-            i = self.apiList.findItems(a, QtCore.Qt.MatchFixedString)[0]
-            self.apiList.setCurrentItem(i)
-            self.apiList.itemActivated.emit(i)
+            i = self.loaderList.findItems(a, QtCore.Qt.MatchFixedString)[0]
+            self.loaderList.setCurrentItem(i)
+            self.loaderList.itemActivated.emit(i)
             self.coTeToMainView.setCurrentIndex(1)
         else:
             print('Unknown URL scheme:', url)
@@ -197,13 +197,15 @@ class CoTeToWidget(QtWidgets.QWidget):
         if f and f[0]:
             self.outputInput.setText(f[0])
 
-    # API methods
-    def activateAPI(self):
-        items = self.apiList.selectedItems()
+    # loader methods
+    def activateLoader(self):
+        items = self.loaderList.selectedItems()
         if items:
-            api = items[0].text()
-        self.apiView.clear()
-        self.apiView.setText(self.ctt.apiInfoText(api, 'html'))
+            loader = items[0].text()
+        self.loaderView.clear()
+        # FIXME: this is ugly, loader class is not instantiated yet ... but we need the information 
+        c = self.ctt.loaders[loader]
+        self.loaderView.setText(c.infoText(c, 'html'))
 
     # generator methods
     def exploreGenerators(self):

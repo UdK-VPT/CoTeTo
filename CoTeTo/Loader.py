@@ -73,6 +73,6 @@ class Loader(object):
 
     def infoText(self, fmt='txt'):
         """return information on this loader in text form"""
-        t = Template(generatorInfoTmpl[fmt])
+        t = Template(loaderInfoTmpl[fmt])
         return t.substitute(name=self.name, description=self.description, author=self.author, version=self.version,
                             helptxt=self.helptxt, filename=__file__, fileurl=pathname2url(__file__))

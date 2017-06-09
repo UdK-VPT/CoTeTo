@@ -27,10 +27,10 @@ Version:     ${cfg['GENERATOR'].get('version')}
 Author:      ${cfg['GENERATOR'].get('author')}
 Path:        ${path}
 
-Data API:
-    requires ${cfg['API'].get('name')}, version ${cfg['API'].get('minVer', '?')}...${cfg['API'].get('maxVer', '?')}
+Data Loader:
+    requires ${cfg['LOADER'].get('name')}, version ${cfg['LOADER'].get('minVer', '?')}...${cfg['LOADER'].get('maxVer', '?')}
     % if api:
-    using version ${api.version} from ${api.__file__}
+    using version ${loader.version} from ${loader.__file__}
     % else:
     *** NOT FOUND! ***
     % endif
@@ -41,13 +41,6 @@ Main Template:
 % if cfg.has_section('PYFILTER'):
 Python filter:
     ${cfg['PYFILTER'].get('module')}.${cfg['PYFILTER'].get('function')}
-% endif
-
-% if cfg.has_section('MAPRULES'):
-Mapping Rules:
-    % for f in cfg['MAPRULES'].get('files', '').split(','):
-    ${f}
-    % endfor
 % endif
 """,
 
@@ -60,11 +53,11 @@ Mapping Rules:
 <h3>Path</h3>
 <p><a href="file:${p2u(path)}">${path}</a> </p>
 
-<h3>Data API</h3>
+<h3>Data Loader</h3>
 <p>
-Requires ${cfg['API'].get('name')}, version ${cfg['API'].get('minVer', '?')}...${cfg['API'].get('maxVer', '?')}<br/>
-% if api:
-Found <a href="api://${api.name}___${api.version}">version ${api.version}</a><br/>
+Requires ${cfg['LOADER'].get('name')}, version ${cfg['LOADER'].get('minVer', '?')}...${cfg['LOADER'].get('maxVer', '?')}<br/>
+% if loader:
+Found <a href="loader://${loader.name}___${loader.version}">version ${loader.version}</a><br/>
 % else:
 <b>Not found, generator is not usable!</b><br/>
 % endif
@@ -76,15 +69,6 @@ Found <a href="api://${api.name}___${api.version}">version ${api.version}</a><br
 % if cfg.has_section('PYFILTER'):
 <h3>Python filter</h3>
 <p>${cfg['PYFILTER'].get('module')}.${cfg['PYFILTER'].get('function')}</p>
-% endif
-
-% if cfg.has_section('MAPRULES'):
-<h3>Mapping Rules</h3>
-<p>
-% for f in cfg['MAPRULES'].get('files', '').split(','):
-${f}<br/>
-% endfor
-</p>
 % endif
 """
 }
@@ -126,7 +110,7 @@ class Generator(object):
     def infoText(self, fmt='txt'):
         """return information on this generator in text form"""
         t = Template(generatorInfoTmpl[fmt])
-        return t.render(cfg=self.cfg, path=self.packagePath, api=self.api, p2u=self.controller.pathname2url)
+        return t.render(cfg=self.cfg, path=self.packagePath, loader=self.loader, p2u=self.controller.pathname2url)
 
     def getReadableFile(self, name, folder=''):
         """return a readable file-like object from package folder or zip"""
