@@ -245,18 +245,20 @@ class CoTeToWidget(QtWidgets.QWidget):
     def executeGenerator(self):
         line = self.uriInput.text()
         uriList = [u.strip() for u in line.split(',')]
-        outputFile = str(self.outputInput.text())
-        if not outputFile:
-            tmp, outputFile = tempfile.mkstemp(suffix='.txt', text=True)
-            self.outputInput.setText(outputFile)
-        if not os.path.isabs(outputFile):
-            outputFile = os.path.abspath(outputFile)
+        outputBase = str(self.outputInput.text())
+        if not outputBase:
+            tmp, outputBase = tempfile.mkstemp(suffix='.txt', text=True)
+            self.outputInput.setText(outputBase)
+        if not os.path.isabs(outputBase):
+            outputBase = os.path.abspath(outputBase)
         x = self.activeGenerator.execute(uriList)
-        o = open(outputFile, 'w')
-        o.write(x.read())
-        o.close()
-        if self.openOutputButton.isChecked():
-            QtGui.QDesktopServices.openUrl(QtCore.QUrl.fromLocalFile(outputFile))
+        for ext in x:
+            outputFile = outputBase+ext
+            o = open(outputFile, 'w')
+            o.write(x[ext].read())
+            o.close()
+            if self.openOutputButton.isChecked():
+                QtGui.QDesktopServices.openUrl(QtCore.QUrl.fromLocalFile(outputFile))
 
     def closeEvent(self, e):
         # first reset output streams to standard settings

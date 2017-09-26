@@ -1,0 +1,20 @@
+[GENERATOR]
+name = TestMultiOutput
+version = 0.1
+description = Output the lines of the input files with line numbers added
+author = Jörg Rädler
+
+[LOADER]
+name = TextFile
+minVer = 0.1
+maxVer = 2.0
+
+[TEMPLATE_1]
+topFile = numberlines.tmpl
+type = mako
+ext = .foo
+
+[TEMPLATE_2]
+topFile = numberlines.tmpl
+type = mako
+ext = .bar

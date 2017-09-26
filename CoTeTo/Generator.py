@@ -29,14 +29,16 @@ Path:        ${path}
 
 Data Loader:
     requires ${cfg['LOADER'].get('name')}, version ${cfg['LOADER'].get('minVer', '?')}...${cfg['LOADER'].get('maxVer', '?')}
-    % if api:
-    using version ${loader.version} from ${loader.__file__}
+    % if loader:
+    using version ${loader.version}
     % else:
     *** NOT FOUND! ***
     % endif
 
-Main Template:
-    ${cfg['TEMPLATES'].get('topFile')}
+Templates:
+% for t in [s for s in cfg.sections() if s.upper().startswith('TEMPLATE')]:
+    ${cfg[t].get('ext', 'DEFAULT')}: ${cfg[t].get('topFile')}
+% endfor
 
 % if cfg.has_section('PYFILTER'):
 Python filter:
@@ -63,8 +65,10 @@ Found <a href="loader://${loader.name}___${loader.version}">version ${loader.ver
 % endif
 </p>
 
-<h3>Main Template</h3>
-<p>${cfg['TEMPLATES'].get('topFile')}</p>
+<h3>Templates</h3>
+% for t in [s for s in cfg.sections() if s.upper().startswith('TEMPLATE')]:
+<p><b>${cfg[t].get('ext', 'DEFAULT')}:</b> ${cfg[t].get('topFile')} </p>
+% endfor
 
 % if cfg.has_section('PYFILTER'):
 <h3>Python filter</h3>
@@ -160,13 +164,27 @@ class Generator(object):
         function(self.data, self.controller.systemCfg, self.cfg, self.logger)
 
     def executeTemplates(self):
-        """execeute the templates with the data, return the output buffer"""
-        tmplType = self.cfg['TEMPLATES'].get('type', 'mako')
+        """execeute all templates, return the output buffers and extensions"""
+        tmpls = [s for s in self.cfg.sections() if s.upper().startswith('TEMPLATE')]
+        txt = {}
+        for tmpl in tmpls:
+            ext = self.cfg[tmpl].get('ext', '')
+            if ext in txt:
+                while ext in txt:
+                    ext.append('X')
+                self.logger.error('GEN | file extension already exists, using %s!' % ext)
+            self.logger.debug('GEN | processing template setup '+tmpl)
+            txt[ext] = self.executeTemplate(tmpl)
+        return txt
+
+    def executeTemplate(self, name):
+        """execeute a single template with the data, return the output buffer"""
+        tmplType = self.cfg[name].get('type', 'mako')
         if tmplType == 'mako':
             self.logger.debug('GEN | calling mako template')
             tLookup = TemplateLookup(directories=[self.getTemplateFolder()])
             template = Template("""<%%include file="%s"/>""" %
-                self.cfg['TEMPLATES'].get('topFile'),
+                self.cfg[name].get('topFile'),
                 lookup=tLookup, strict_undefined=True)
             buf = StringIO()
             ctx = Context(buf, data=self.data, systemCfg=self.controller.systemCfg,
@@ -178,7 +196,7 @@ class Generator(object):
         elif tmplType == 'jinja2':
             self.logger.debug('GEN | calling jinja2 template')
             env = Environment(loader=FileSystemLoader(self.getTemplateFolder()))
-            template = env.get_template(self.cfg['TEMPLATES'].get('topFile'))
+            template = env.get_template(self.cfg[name].get('topFile'))
             self.data['_systemCfg'] = self.controller.systemCfg
             self.data['_generatorCfg'] = self.cfg
             self.data['_logger'] = self.logger

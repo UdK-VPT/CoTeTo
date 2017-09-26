@@ -11,8 +11,8 @@ class TestDummy(Loader):
     description = 'Test dummy that returns some data'
     version = '1.0'
     author = 'Joerg Raedler jraedler@udk-berlin.de'
-    helptxt = """Load text files, returns an list of lines for each file"""
-    
+    helptxt = """just return some meaningless data"""
+
     def load(self, uriList):
         data = {}
         data['foo'] = 42

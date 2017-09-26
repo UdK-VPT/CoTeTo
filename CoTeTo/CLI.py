@@ -73,17 +73,34 @@ def main():
         parser.error('This generator is not valid, list choices with -l!'+nl)
     g = ctt.generators[args.generator[0]]
 
-    if args.output:
-        outFile = open(args.output[0], 'w')
-    else:
-        outFile = sys.stdout
-
     if args.show_generator:
         # FIXME
         print(g.infoText('txt'))
         return 0
+
     elif args.data_source:
-        outFile.write(g.execute(args.data_source).read())
+        # execute the generator
+        o = g.execute(args.data_source)
+        if len(o) == 1:
+            # single file output
+            ext = o.keys()[0]
+            if args.output:
+                outFile = open(args.output[0]+ext, 'w')
+                outFile.write(o[ext].read())
+                outFile.close()
+            else:
+                sys.stdout.write(o[ext].read())
+        else:
+            # multi file output
+            if args.output:
+                for ext in o:
+                    outFile = open(args.output[0]+ext, 'w')
+                    outFile.write(o[ext].read())
+                    outFile.close()
+            else:
+                for ext in o:
+                    sys.stdout.write('### FILE: %s\n' % ext)
+                    sys.stdout.write(o[ext].read())
         return 0
     else:
         parser.print_help()
