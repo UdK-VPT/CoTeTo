@@ -79,8 +79,3 @@ class Controller(object):
                         self.generators[n] = g
                     except Exception as e:
                         self.logger.exception('CON-GEN | exception while loading element')
-
-    #def apiInfoText(self, api, fmt='txt'):
-        #"""return information on an api in text form"""
-        #t = Template(apiInfoTmpl[fmt])
-        #return t.render(m=self.apis[api], p2u=pathname2url)

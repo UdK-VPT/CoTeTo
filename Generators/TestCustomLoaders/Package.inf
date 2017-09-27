@@ -1,0 +1,14 @@
+[GENERATOR]
+name = TestCustomLoaders
+version = 0.1
+description = test custom loaders - please load test/custom.txt as input
+author = Joerg Raedler jraedler@udk-berlin.de
+
+[LOADER]
+name = MyLoader
+module = MyLoader
+minVer = 0.1
+maxVer = 2.0
+
+[TEMPLATE]
+topFile = Main.tmpl

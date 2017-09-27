@@ -100,16 +100,29 @@ class Generator(object):
         self.author = g.get('author')
         self.description = g.get('description')
 
-        # check for a usable api
+        # check for a usable loader
         lcfg = self.cfg['LOADER']
         self.loader = None
         self.logger.debug('GEN | locate loader')
-        # FIXME: check for local loader class
-        for loader in self.controller.loaders.values():
-            if lcfg.get('name') == loader.name:
+        if lcfg.get('module'):
+            # looks like we have a custom class
+            moduleName = lcfg.get('module')
+            className = lcfg.get('name')
+            modulePath = os.path.join(self.packagePath, 'Loaders')
+            self.logger.debug('GEN | import loader module %s', moduleName)
+            module = import_file(modulePath, moduleName)
+            loader = getattr(module, className)
+            if className == loader.name:
                 if (lcfg.get('minVer', '000') <= loader.version) and (lcfg.get('maxVer', '999999') >= loader.version):
                     self.logger.debug('GEN | found loader: %s::%s', loader.name, loader.version)
                     self.loader = loader
+        else:
+            # use the standard loaders
+            for loader in self.controller.loaders.values():
+                if lcfg.get('name') == loader.name:
+                    if (lcfg.get('minVer', '000') <= loader.version) and (lcfg.get('maxVer', '999999') >= loader.version):
+                        self.logger.debug('GEN | found loader: %s::%s', loader.name, loader.version)
+                        self.loader = loader
 
     def infoText(self, fmt='txt'):
         """return information on this generator in text form"""
