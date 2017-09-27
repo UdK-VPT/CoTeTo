@@ -37,7 +37,7 @@ class Loader(object):
     version = '1.0'
     author = 'Joerg Raedler jraedler@udk-berlin.de'
     helptxt = """This is just an abstract class, real loaders should reimplement setup() and load()"""
-
+    isCustom = False
 
     def __init__(self, systemCfg, generatorCfg, logger):
         self.systemCfg = systemCfg
@@ -48,13 +48,13 @@ class Loader(object):
             self.setup()
         except:
             self.logger.exception('LDR | error during setup')
-            
-   
+
+
     def setup(self):
         """generic setup method - should be overwritten in loaders implementation"""
         self.logger.debug('LDR | empty generic setup method called')
 
-    
+
     def load(self, uriList):
         """generic setup method - should be overwritten in loaders implementation"""
         self.logger.debug('LDR | empty generic load method called')

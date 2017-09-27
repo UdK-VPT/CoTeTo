@@ -59,7 +59,11 @@ Python filter:
 <p>
 Requires ${cfg['LOADER'].get('name')}, version ${cfg['LOADER'].get('minVer', '?')}...${cfg['LOADER'].get('maxVer', '?')}<br/>
 % if loader:
+% if loader.isCustom:
+    Found version ${loader.version}<br/>
+% else:
 Found <a href="loader://${loader.name}___${loader.version}">version ${loader.version}</a><br/>
+%endif
 % else:
 <b>Not found, generator is not usable!</b><br/>
 % endif
@@ -116,6 +120,7 @@ class Generator(object):
                 if (lcfg.get('minVer', '000') <= loader.version) and (lcfg.get('maxVer', '999999') >= loader.version):
                     self.logger.debug('GEN | found loader: %s::%s', loader.name, loader.version)
                     self.loader = loader
+                    self.loader.isCustom = True
         else:
             # use the standard loaders
             for loader in self.controller.loaders.values():
