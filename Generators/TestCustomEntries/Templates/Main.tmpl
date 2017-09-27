@@ -1,0 +1,20 @@
+#
+#   CoTeTo
+#       Version:  ${systemCfg['version']}
+#       Platform: ${systemCfg['platform']}
+#       Path:     ${systemCfg['path']}
+#       Gen-Path: ${', '.join(systemCfg['generatorPath'])}
+#
+#   Generator
+#       Name:     ${generatorCfg['GENERATOR'].get('name')}
+#       Version:  ${generatorCfg['GENERATOR'].get('version')}
+
+% if generatorCfg['FOO_BAR'].getboolean('say_hello'):
+Hello!
+Try to change the custom value in Package.inf, reload the generator and run again!
+% else:
+No 'Hello!' this time!
+Try to change the custom value in Package.inf, reload the generator and run again!
+% endif
+
+value: ${generatorCfg['FOO_BAR'].getboolean('say_hello')}

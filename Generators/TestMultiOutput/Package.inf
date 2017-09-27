@@ -9,6 +9,8 @@ name = TextFile
 minVer = 0.1
 maxVer = 2.0
 
+# any section name that starts with the string TEMPLATE can be used
+
 [TEMPLATE_NUMB]
 topFile = numberlines.tmpl
 type = mako
