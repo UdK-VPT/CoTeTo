@@ -1,14 +1,9 @@
+# CoTeTo - Code Templating Tool
+CoTeTo is a tool for the generation of source code and other text from different data sources.
 
-CoTeTo - Code Templating Tool
-=============================
+This software is work-in-progress. Documentation may be incomplete or missing and the software may not run properly.
 
-CoTeTo is a tool for the generation of (Modelica) source  code.
-
-This software is work-in-progress.
-Documentation will be incomplete or missing and the software may not run properly.
-
-Concept
--------
+## Concept
 CoTeTo manages a list of generators and data loaders.
 A generator is a package (contained in folder or a zip file) that contains output specific elements:
 
@@ -20,8 +15,7 @@ Generators are loaded from a list of folders.
 Each generator (defined by a name and a version number in Package.inf) depends on a specific loader.
 Loaders are python modules loaded from the module package `CoTeTo.Loaders` or from the generator.
 
-Dependencies
-------------
+## Dependencies
 1. CoTeTo works with vanilla Python 32bit or 64bit version >=3.5 .
 [WinPython](http://winpython.github.io/) is recommended, because it includes most packages.
 3. WinPython does not include the Mako templating engine,
@@ -34,8 +28,7 @@ You can check these dependencies by running the script
 Once all dependencies are installed,
 you should be able to launch the GUI by running `python CoTeTo\scripts\CoTeTo-gui.py`
 
-Installation
-------------
+## Installation
 The framework can be used in different ways:
 
 1. Directly from the source folder:
@@ -49,8 +42,7 @@ This is the preferred way during development.
 
 3. Using one of the packages that will be available in the future.
 
-Contents
---------
+## Contents
 The source folder contains different elements. After installation these elements
 are stored in different places depending on your system.
 
@@ -62,7 +54,7 @@ the core functions of CoTeTo.
 ### Package: CoTeTo.Loaders
 This is a python module package containing the data loaders. Developers will
 probably need to edit and amend these modules. If you add new modules, you need
-to list them in `__init__.py`. 
+to list them in `__init__.py`.
 
 ### Folder: Generators
 This folder contains the predefined generators. You can copy this to your
