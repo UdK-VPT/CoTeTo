@@ -9,11 +9,11 @@ setup(name = 'CoTeTo',
     author_email = 'jraedler@udk-berlin.de',
     url = 'https://github.com/UdK-VPT/CoTeTo',
     # contents
-    packages = ['CoTeTo', 'CoTeTo_DataAPI'],
+    packages = ['CoTeTo', 'CoTeTo.Loaders'],
     package_data = {'CoTeTo': ['res/*']},
     scripts = ['scripts/CoTeTo-cli.py', 'scripts/CoTeTo-gui.py'],
     # dependencies
-    install_requires = ['mako', 'jinja2', 'PyQt4'],
+    install_requires = ['mako', 'jinja2', 'PyQt5'],
     # classifiers
     classifiers = [
         "Development Status :: 4 - Beta",
