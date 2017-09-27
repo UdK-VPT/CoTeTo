@@ -4,7 +4,11 @@
 # 201500225 Joerg Raedler jraedler@udk-berlin.de
 #
 
-import os, os.path, zipfile, tempfile, configparser
+import os
+import os.path
+import zipfile
+import tempfile
+import configparser
 
 # mako template engine
 from mako.template import Template
@@ -20,7 +24,7 @@ from CoTeTo.import_file import import_file
 
 # a template for the generator info text as txt and html
 generatorInfoTmpl = {
-'txt' : """
+    'txt' : """
 Name:        ${cfg['GENERATOR'].get('name')}
 Description: ${cfg['GENERATOR'].get('description')}
 Version:     ${cfg['GENERATOR'].get('version')}
@@ -46,7 +50,7 @@ Python filter:
 % endif
 """,
 
-'html' : """
+    'html' : """
 <h2>${cfg['GENERATOR'].get('name')} - version ${cfg['GENERATOR'].get('version')}</h2>
 <h3>Author</h3>
 <p>${cfg['GENERATOR'].get('author')}</p>
@@ -83,6 +87,7 @@ Found <a href="loader://${loader.name}___${loader.version}">version ${loader.ver
 
 
 class Generator(object):
+
     """represents a generator package """
 
     def __init__(self, controller, packagePath=None):
@@ -191,7 +196,7 @@ class Generator(object):
                 while ext in txt:
                     ext.append('X')
                 self.logger.error('GEN | file extension already exists, using %s!' % ext)
-            self.logger.debug('GEN | processing template setup '+tmpl)
+            self.logger.debug('GEN | processing template setup ' + tmpl)
             txt[ext] = self.executeTemplate(tmpl)
         return txt
 
@@ -202,11 +207,11 @@ class Generator(object):
             self.logger.debug('GEN | calling mako template')
             tLookup = TemplateLookup(directories=[self.getTemplateFolder()])
             template = Template("""<%%include file="%s"/>""" %
-                self.cfg[name].get('topFile'),
-                lookup=tLookup, strict_undefined=True)
+                                self.cfg[name].get('topFile'),
+                                lookup=tLookup, strict_undefined=True)
             buf = StringIO()
             ctx = Context(buf, d=self.data, systemCfg=self.controller.systemCfg,
-                generatorCfg=self.cfg, logger=self.logger)
+                          generatorCfg=self.cfg, logger=self.logger)
             template.render_context(ctx)
             buf.flush()
             buf.seek(0)
@@ -223,7 +228,7 @@ class Generator(object):
             buf = StringIO(tmp)
             return(buf)
         else:
-            raise Exception('Unknown template system: '+tmplType)
+            raise Exception('Unknown template system: ' + tmplType)
 
     def execute(self, uriList=[]):
         if not self.loader:

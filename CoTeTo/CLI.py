@@ -4,7 +4,10 @@
 # 201500225 Joerg Raedler jraedler@udk-berlin.de
 #
 
-import sys, os, argparse, configparser
+import sys
+import os
+import argparse
+import configparser
 from CoTeTo.Controller import Controller
 
 descr = """
@@ -14,6 +17,7 @@ CoTeTo-cli is the command line interface to CoTeTo. CoTeTo-gui provides a graphi
 
 
 nl = os.linesep
+
 
 def main():
     """main function when CoTeTo is used on the command line"""
@@ -29,16 +33,16 @@ def main():
     grp.add_argument('-o', '--output', metavar='FILE', nargs=1, help='use FILE for output instead of stdout')
     grp.add_argument('-s', '--show-generator', action='store_true', help='show information on generator (needs -g)')
     grp.add_argument('data_source', metavar='dataSource', type=str, default='', nargs='*',
-                        help='execute the generator with these data source URIs passed to the loader (needs -g)')
+                     help='execute the generator with these data source URIs passed to the loader (needs -g)')
     args = parser.parse_args()
 
     # first read config file for default values
     defaults = {
         'GeneratorPath': os.environ.get('COTETO_GENERATORS', ''),
-        'LogLevel' : '0',
+        'LogLevel': '0',
     }
     cfg = configparser.ConfigParser(defaults)
-    homeVar = {'win32':'USERPROFILE', 'linux':'HOME', 'linux2':'HOME', 'darwin':'HOME'}.get(sys.platform)
+    homeVar = {'win32': 'USERPROFILE', 'linux': 'HOME', 'linux2': 'HOME', 'darwin': 'HOME'}.get(sys.platform)
     cfg.read(os.path.join(os.environ.get(homeVar, ''), '.CoTeTo.cfg'))
 
     # generatorPath
@@ -68,9 +72,9 @@ def main():
 
     # from here we need a valid generator name!
     if not args.generator:
-        parser.error('Please specify a generator with -g or --generator or get help with -h!'+nl)
+        parser.error('Please specify a generator with -g or --generator or get help with -h!' + nl)
     if not args.generator[0] in ctt.generators:
-        parser.error('This generator is not valid, list choices with -l!'+nl)
+        parser.error('This generator is not valid, list choices with -l!' + nl)
     g = ctt.generators[args.generator[0]]
 
     if args.show_generator:
@@ -85,7 +89,7 @@ def main():
             # single file output
             ext = o.keys()[0]
             if args.output:
-                outFile = open(args.output[0]+ext, 'w')
+                outFile = open(args.output[0] + ext, 'w')
                 outFile.write(o[ext].read())
                 outFile.close()
             else:
@@ -94,7 +98,7 @@ def main():
             # multi file output
             if args.output:
                 for ext in o:
-                    outFile = open(args.output[0]+ext, 'w')
+                    outFile = open(args.output[0] + ext, 'w')
                     outFile.write(o[ext].read())
                     outFile.close()
             else:

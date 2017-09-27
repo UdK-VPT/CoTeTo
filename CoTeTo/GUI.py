@@ -4,7 +4,14 @@
 # 201500225 Joerg Raedler jraedler@udk-berlin.de
 #
 
-import sys, os, os.path, tempfile, argparse, logging, configparser, traceback
+import sys
+import os
+import os.path
+import tempfile
+import argparse
+import logging
+import configparser
+import traceback
 import CoTeTo
 from CoTeTo.Controller import Controller
 from PyQt5 import QtCore, QtWidgets, QtGui, uic
@@ -26,7 +33,8 @@ class QtLogHandler(logging.Handler):
     def emit(self, record):
         record = self.format(record)
         if record:
-            XStream.stdout().write('%s\n'%record)
+            XStream.stdout().write('%s\n' % record)
+
 
 class XStream(QtCore.QObject):
     _stdout = None
@@ -35,13 +43,13 @@ class XStream(QtCore.QObject):
     _ostderr = None
     messageWritten = QtCore.pyqtSignal(str)
 
-    def flush( self ):
+    def flush(self):
         pass
 
-    def fileno( self ):
+    def fileno(self):
         return -1
 
-    def write( self, msg ):
+    def write(self, msg):
         if not self.signalsBlocked():
             self.messageWritten.emit(msg)
 
@@ -70,6 +78,7 @@ class XStream(QtCore.QObject):
 
 
 class LogViewer(QtWidgets.QWidget):
+
     def __init__(self, resPath, *arg, **kwarg):
         QtWidgets.QWidget.__init__(self)
         # load the ui
@@ -79,14 +88,14 @@ class LogViewer(QtWidgets.QWidget):
         self.logHandler = QtLogHandler()
         self.logHandler.setFormatter(logging.Formatter("%(levelname)s: %(message)s"))
         self.logger = logging.getLogger('CoTeTo')
-        i = int(kwarg['logLevel'] / 10 ) - 1 # convert level to QComboBox index
+        i = int(kwarg['logLevel'] / 10) - 1  # convert level to QComboBox index
         self.levelSelect.setCurrentIndex(i)
         self.levelSelect.currentIndexChanged.connect(self.setLevel)
         self.clearButton.pressed.connect(self.clearLog)
         self.saveButton.pressed.connect(self.saveLog)
 
     def setLevel(self, i):
-        l = (i+1) * 10 # convert QComboBox index to level :-)
+        l = (i + 1) * 10  # convert QComboBox index to level :-)
         self.logger.setLevel(l)
 
     def clearLog(self):
@@ -102,7 +111,9 @@ class LogViewer(QtWidgets.QWidget):
             QtWidgets.QMessageBox.critical(self, 'Error during save', 'Message log could not be saved!')
             self.logger.exception('Could not save message log')
 
+
 class CoTeToWidget(QtWidgets.QWidget):
+
     def __init__(self, app, resPath, cfg, *arg, **kwarg):
         QtWidgets.QWidget.__init__(self)
         self.app = app
@@ -143,7 +154,7 @@ class CoTeToWidget(QtWidgets.QWidget):
         self.loaderList.item(0).setSelected(True)
 
         # generators
-        self.activeGenerator=None
+        self.activeGenerator = None
         self.generatorListReloadButton.pressed.connect(self.updateGeneratorList)
         self.generatorExplorerButton.pressed.connect(self.exploreGenerators)
         self.generatorList.itemSelectionChanged.connect(self.activateGenerator)
@@ -168,15 +179,14 @@ class CoTeToWidget(QtWidgets.QWidget):
                     break
         # end of preferences
 
-
     # general methods
     def exceptionHook(self, t, v, tb):
         """Show unhandled exceptions"""
         msg = ''.join(traceback.format_exception(t, v, tb))
         self.logger.critical('An unhandled exception occured')
-        print('*'*40+'\n'+msg+'*'*40)
+        print('*' * 40 + '\n' + msg + '*' * 40)
         QtWidgets.QMessageBox.critical(self, 'An unhandled exception occured',
-            'Please have a look at the <b>Messages</b> tab for details!')
+                                       'Please have a look at the <b>Messages</b> tab for details!')
 
     def openURL(self, url):
         """open an link target from the generator or loader view"""
@@ -259,7 +269,7 @@ class CoTeToWidget(QtWidgets.QWidget):
             outputBase = os.path.abspath(outputBase)
         x = self.activeGenerator.execute(uriList)
         for ext in x:
-            outputFile = outputBase+ext
+            outputFile = outputBase + ext
             o = open(outputFile, 'w')
             o.write(x[ext].read())
             o.close()
@@ -308,10 +318,10 @@ def main():
     # first read config file for default values
     defaults = {
         'GeneratorPath': os.environ.get('COTETO_GENERATORS', ''),
-        'LogLevel' : '2',
+        'LogLevel': '2',
     }
     cfg = configparser.ConfigParser(defaults)
-    homeVar = {'win32':'USERPROFILE', 'linux':'HOME', 'linux2':'HOME', 'darwin':'HOME'}.get(sys.platform)
+    homeVar = {'win32': 'USERPROFILE', 'linux': 'HOME', 'linux2': 'HOME', 'darwin': 'HOME'}.get(sys.platform)
     cfgFile = os.path.join(os.environ.get(homeVar, ''), '.CoTeTo.cfg')
     if os.path.isfile(cfgFile):
         cfg.read(cfgFile)

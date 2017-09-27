@@ -4,13 +4,18 @@
 # 201500225 Joerg Raedler jraedler@udk-berlin.de
 #
 
-import sys, os, os.path, zipfile, logging
+import sys
+import os
+import os.path
+import zipfile
+import logging
 import CoTeTo
 from CoTeTo.Generator import Generator
 from urllib.request import pathname2url
 
 
 class Controller(object):
+
     """main controller of the code generation framework"""
 
     def __init__(self, generatorPath=[], logger='CoTeTo', logHandler=None, logLevel=logging.WARNING):
@@ -26,7 +31,7 @@ class Controller(object):
         self.systemCfg = {
             'platform': sys.platform,
             'version': CoTeTo.__version__,
-            'path' : os.path.dirname(os.path.realpath(__file__)),
+            'path': os.path.dirname(os.path.realpath(__file__)),
             # need more here?
         }
         self.pathname2url = pathname2url
@@ -52,12 +57,13 @@ class Controller(object):
 
     def readStandardLoaders(self):
         """read list of loaders and load corresponding modules"""
-        import CoTeTo.Loaders, importlib
+        import CoTeTo.Loaders
+        import importlib
         self.loaders = {}
         self.logger.debug('CON-LDR | start loading')
         for l in CoTeTo.Loaders.__all__:
             self.logger.debug('CON-LDR | try to load: %s', l)
-            m = importlib.import_module('.'+l, 'CoTeTo.Loaders')
+            m = importlib.import_module('.' + l, 'CoTeTo.Loaders')
             c = getattr(m, l)
             n = '%s::%s' % (c.name, c.version)
             self.loaders[n] = c

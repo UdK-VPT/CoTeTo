@@ -7,13 +7,14 @@ from CoTeTo.Loader import Loader
 from os.path import isfile
 from csv import Sniffer, DictReader
 
+
 class CSVFile(Loader):
     name = 'CSVFile'
     description = 'CSV file loader for CoTeTo'
     version = '1.0'
     author = 'Joerg Raedler jraedler@udk-berlin.de'
     helptxt = """Load CSV files, returns a csv.DictReader instance for each file"""
-    
+
     def load(self, uriList):
         data = {}
         for u in uriList:

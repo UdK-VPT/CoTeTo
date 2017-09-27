@@ -6,6 +6,7 @@
 from CoTeTo.Loader import Loader
 from os.path import isfile
 
+
 class TestDummy(Loader):
     name = 'TestDummy'
     description = "'Test loader that returns some data - doesn't need any input"
@@ -20,6 +21,6 @@ class TestDummy(Loader):
         d['spam'] = "I'm a placeholder"
         d['eggs'] = list(range(100))
         d['weekdays'] = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
-        d['nonsense'] = {0: 'x', 'y': 1, 'abc':{'def':'ghi'}}
+        d['nonsense'] = {0: 'x', 'y': 1, 'abc': {'def': 'ghi'}}
         data['dummy'] = d
         return data

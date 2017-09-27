@@ -7,6 +7,7 @@ from CoTeTo.Loader import Loader
 from os.path import isfile
 from pickle import load
 
+
 class PickleFile(Loader):
     name = 'PickleFile'
     description = 'Pickle file loader for CoTeTo'

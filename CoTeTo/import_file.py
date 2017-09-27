@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
-import sys, importlib
+import sys
+import importlib
+
 
 def import_file(module_path='', module=''):
     importlib.invalidate_caches()

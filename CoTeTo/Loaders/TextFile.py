@@ -6,13 +6,14 @@
 from CoTeTo.Loader import Loader
 from os.path import isfile
 
+
 class TextFile(Loader):
     name = 'TextFile'
     description = 'Text file loader for CoTeTo'
     version = '1.0'
     author = 'Joerg Raedler jraedler@udk-berlin.de'
     helptxt = """Load text files, returns an list of lines for each file"""
-    
+
     def load(self, uriList):
         data = {}
         for u in uriList:

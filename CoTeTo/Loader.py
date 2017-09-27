@@ -49,16 +49,13 @@ class Loader(object):
         except:
             self.logger.exception('LDR | error during setup')
 
-
     def setup(self):
         """generic setup method - should be overwritten in loaders implementation"""
         self.logger.debug('LDR | empty generic setup method called')
 
-
     def load(self, uriList):
         """generic setup method - should be overwritten in loaders implementation"""
         self.logger.debug('LDR | empty generic load method called')
-
 
     def execute(self, uriList):
         self.logger.debug('LDR | executing loader %s with uriList: %s' % (self.name, uriList))
@@ -69,7 +66,6 @@ class Loader(object):
 
     # make class callable
     __call__ = execute
-
 
     def infoText(self, fmt='txt'):
         """return information on this loader in text form"""
