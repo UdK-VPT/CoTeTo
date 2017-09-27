@@ -115,6 +115,8 @@ class CoTeToWidget(QtWidgets.QWidget):
         self.ui = uic.loadUi(os.path.join(resPath, 'CoTeTo-GUI.ui'), self)
         self.setWindowTitle('CoTeTo GUI | Version: %s' % (CoTeTo.__version__))
         self.cfg = cfg
+        self._arg = arg
+        self._kwarg = kwarg
 
         # create a logView?
         if 'logLevel' in kwarg and kwarg['logLevel'] > 0:
@@ -127,8 +129,12 @@ class CoTeToWidget(QtWidgets.QWidget):
         # replace systems exception hook
         sys.excepthook = self.exceptionHook
 
+        # do more initialization later
+        QtCore.QTimer().singleShot(500, self.lateInit)
+
+    def lateInit(self):
         # create a controller
-        self.ctt = Controller(*arg, **kwarg)
+        self.ctt = Controller(*(self._arg), **(self._kwarg))
         # loaders
         self.loaderList.itemSelectionChanged.connect(self.activateLoader)
         self.loaderView.anchorClicked.connect(self.openURL)
@@ -150,8 +156,8 @@ class CoTeToWidget(QtWidgets.QWidget):
         self.outputLoadButton.clicked.connect(self.getOutputFile)
 
         # set preferences from cfg
-        if cfg.has_section('PREFERENCES'):
-            p = cfg['PREFERENCES']
+        if self.cfg.has_section('PREFERENCES'):
+            p = self.cfg['PREFERENCES']
             self.uriInput.setText(p.get('uriList', ''))
             self.outputInput.setText(p.get('outputFile', ''))
             g = p.get('generator', '')
@@ -203,7 +209,7 @@ class CoTeToWidget(QtWidgets.QWidget):
         if items:
             loader = items[0].text()
         self.loaderView.clear()
-        # FIXME: this is ugly, loader class is not instantiated yet ... but we need the information 
+        # FIXME: this is ugly, loader class is not instantiated yet ... but we need the information
         c = self.ctt.loaders[loader]
         self.loaderView.setText(c.infoText(c, 'html'))
 
