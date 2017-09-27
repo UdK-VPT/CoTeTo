@@ -51,4 +51,12 @@ You can specify a filter function by a `module` and a `function` to be executed 
 All sections starting with the string `TEMPLATE` define a template structure to use.
 Such a section need at least one entry called `topFile` to specify the top level template file (located in the subfolder `Templates`). The type of the template can be specified with the entry `type`. At the moment only `mako` (default) and `jinja2` are supported.
 
-If you use more than one TEMPLATE section you should use an entry `ext` to specify the file extension (appended to the base output file name).
+If you use more than one `TEMPLATE` section you should use an entry `ext` to specify the file extension (appended to the output file name).
+
+## Templates
+Templates are simple text files with special entries using the `mako` or `jinja2` syntax. The following elements are available:
+
+1. `d` is the base data element. It is usually a dictionary with the URIs used as the keys and the loaded data as the values.
+2. `systemCfg` is a dictionary with some information on the CoTeTo system.
+3. `generatorCfg` contains all information from the file `Package.inf`.
+4. `logger` is an instance of the log system. It can be used to show debugging and error information.
