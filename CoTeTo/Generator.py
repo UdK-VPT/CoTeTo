@@ -40,9 +40,9 @@ Templates:
     ${cfg[t].get('ext', 'DEFAULT')}: ${cfg[t].get('topFile')}
 % endfor
 
-% if cfg.has_section('PYFILTER'):
+% if cfg.has_section('FILTER'):
 Python filter:
-    ${cfg['PYFILTER'].get('module')}.${cfg['PYFILTER'].get('function')}
+    ${cfg['FILTER'].get('module')}.${cfg['FILTER'].get('function')}
 % endif
 """,
 
@@ -70,9 +70,9 @@ Found <a href="loader://${loader.name}___${loader.version}">version ${loader.ver
 <p><b>${cfg[t].get('ext', 'DEFAULT')}:</b> ${cfg[t].get('topFile')} </p>
 % endfor
 
-% if cfg.has_section('PYFILTER'):
+% if cfg.has_section('FILTER'):
 <h3>Python filter</h3>
-<p>${cfg['PYFILTER'].get('module')}.${cfg['PYFILTER'].get('function')}</p>
+<p>${cfg['FILTER'].get('module')}.${cfg['FILTER'].get('function')}</p>
 % endif
 """
 }
@@ -152,14 +152,14 @@ class Generator(object):
         l = self.loader(self.controller.systemCfg, self.cfg, self.logger)
         self.data = l(uriList)
 
-    def executePyFilter(self):
+    def executeFilter(self):
         """execute the python filter to manipulate loaded data"""
-        moduleName = self.cfg['PYFILTER'].get('module')
-        functionName = self.cfg['PYFILTER'].get('function')
+        moduleName = self.cfg['FILTER'].get('module')
+        functionName = self.cfg['FILTER'].get('function')
         modulePath = os.path.join(self.packagePath, 'Filters')
-        self.logger.debug('GEN | import pyfilter module %s', moduleName)
+        self.logger.debug('GEN | import filter module %s', moduleName)
         module = import_file(modulePath, moduleName)
-        self.logger.debug('GEN | calling pyfilter function %s', functionName)
+        self.logger.debug('GEN | calling filter function %s', functionName)
         function = getattr(module, functionName)
         function(self.data, self.controller.systemCfg, self.cfg, self.logger)
 
@@ -213,8 +213,8 @@ class Generator(object):
         # fill data model from the loader using the data URIs
         self.executeLoader(uriList)
         # apply filter
-        if self.cfg.has_section('PYFILTER'):
-            self.executePyFilter()
+        if self.cfg.has_section('FILTER'):
+            self.executeFilter()
         # handle data to template, return text buffer
         return self.executeTemplates()
 

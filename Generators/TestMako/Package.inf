@@ -9,7 +9,7 @@ name = TestDummy
 minVer = 0.1
 maxVer = 2.0
 
-[PYFILTER]
+[FILTER]
 module = Filter01
 function = filter01
 
