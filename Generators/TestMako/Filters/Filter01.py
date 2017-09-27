@@ -1,18 +1,20 @@
-#-*- coding:utf-8 -*-
-#
-# This file is part of MoCGF - a code generation framework
-# 20141114 Joerg Raedler jraedler@udk-berlin.de
-#
+# a filter function is called with the following arguments:
+#   d - the data dictionary read from the loader
+#   systemCfg - system configuration
+#   generatorCfg - generator configuration
+#   logger - a logger instance
 
-# the data dictionary read from the api is the first argument,
-# other arguments may be introduced later...
+def filter01(d, systemCfg, generatorCfg, logger):
 
-def filter01(d, *args, **kwargs):
+    # spread a message
+    logger.debug('hi there! This is a filter running from module: '+__file__)
 
-    print('Filter running from module:', __file__)
+    x = d['dummy']
 
     # manipulate some data
-    d['foo'] += 1
+    x['foo'] += 1
 
     # add more data
-    d['bar'] = 2.0 * d['foo']
+    x['bar'] = 2.0 * x['foo']
+
+    # no return needed - data is manipulated inplace

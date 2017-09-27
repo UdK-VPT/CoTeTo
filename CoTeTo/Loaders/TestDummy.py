@@ -8,13 +8,18 @@ from os.path import isfile
 
 class TestDummy(Loader):
     name = 'TestDummy'
-    description = 'Test dummy that returns some data'
+    description = "'Test loader that returns some data - doesn't need any input"
     version = '1.0'
     author = 'Joerg Raedler jraedler@udk-berlin.de'
     helptxt = """just return some meaningless data"""
 
     def load(self, uriList):
         data = {}
-        data['foo'] = 42
-        data['data'] = 'Im a placeholder!'
+        d = {}
+        d['foo'] = 42
+        d['spam'] = "I'm a placeholder"
+        d['eggs'] = list(range(100))
+        d['weekdays'] = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+        d['nonsense'] = {0: 'x', 'y': 1, 'abc':{'def':'ghi'}}
+        data['dummy'] = d
         return data
