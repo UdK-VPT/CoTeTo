@@ -26,21 +26,27 @@ class Controller(object):
         self.systemCfg = {
             'platform': sys.platform,
             'version': CoTeTo.__version__,
+            'path' : os.path.dirname(os.path.realpath(__file__)),
             # need more here?
         }
         self.pathname2url = pathname2url
         # read standard loaders
         self.readStandardLoaders()
-        # handle empty path list
+        # append a path from the parent folder - just for convenience
+        parent = os.path.dirname(self.systemCfg['path'])
+        p = os.path.join(parent, 'Generators')
+        if os.path.isdir(p):
+            generatorPath.append(p)
+        # append a path from the parents parent folder - just for convenience
+        parent = os.path.dirname(parent)
+        p = os.path.join(parent, 'CoTeTo_Generators')
+        if os.path.isdir(p):
+            generatorPath.append(p)
+        # still empty?
         if not generatorPath:
-            # running from source folder?
-            parent = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-            p = os.path.join(parent, 'Generators')
-            if os.path.isdir(p):
-                generatorPath.append(p)
-            else:
-                raise Exception('No folders to search for generators specified!')
+            raise Exception('No folders to search for generators specified!')
         self.generatorPath = generatorPath
+        self.systemCfg['generatorPath'] = self.generatorPath
         # try to load available generators
         self.rescanGenerators()
 

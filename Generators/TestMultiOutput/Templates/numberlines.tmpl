@@ -1,6 +1,7 @@
-% for name, lines in data.items():
-# input from ${name}
+% for name, lines in d.items():
+::: input from ${name}
 % for n, l in enumerate(lines):
-${'%03i'%n} ${l.strip()}
+${'%03i'%n} ${l}
 %endfor
+
 %endfor

@@ -1,7 +1,7 @@
 [GENERATOR]
-name = TestJinja2
+name = TestMako
 version = 0.1
-description = test the jinja2 engine
+description = test the mako engine
 author = Joerg Raedler jraedler@udk-berlin.de
 
 [LOADER]
@@ -15,4 +15,4 @@ function = filter01
 
 [TEMPLATE]
 topFile = Main.tmpl
-type = jinja2
+type = mako

@@ -1,0 +1,7 @@
+% for name, lines in d.items():
+File: ${name}
+    Lines:  ${len(lines)}
+    Words:  ${len(' '.join(lines).split())}
+    Chars:  ${sum([len(l) for l in lines])}
+    
+%endfor

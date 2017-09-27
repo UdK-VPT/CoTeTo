@@ -187,7 +187,7 @@ class Generator(object):
                 self.cfg[name].get('topFile'),
                 lookup=tLookup, strict_undefined=True)
             buf = StringIO()
-            ctx = Context(buf, data=self.data, systemCfg=self.controller.systemCfg,
+            ctx = Context(buf, d=self.data, systemCfg=self.controller.systemCfg,
                 generatorCfg=self.cfg, logger=self.logger)
             template.render_context(ctx)
             buf.flush()
@@ -197,10 +197,11 @@ class Generator(object):
             self.logger.debug('GEN | calling jinja2 template')
             env = Environment(loader=FileSystemLoader(self.getTemplateFolder()))
             template = env.get_template(self.cfg[name].get('topFile'))
-            self.data['_systemCfg'] = self.controller.systemCfg
-            self.data['_generatorCfg'] = self.cfg
-            self.data['_logger'] = self.logger
-            tmp = template.render(self.data)
+            ns = {'d': self.data}
+            ns['systemCfg'] = self.controller.systemCfg
+            ns['generatorCfg'] = self.cfg
+            ns['logger'] = self.logger
+            tmp = template.render(ns)
             buf = StringIO(tmp)
             return(buf)
         else:

@@ -1,7 +1,7 @@
 [GENERATOR]
 name = TestMultiOutput
 version = 0.1
-description = Output the lines of the input files with line numbers added
+description = Output the lines of the input files with line numbers added, generate a file with some statistics
 author = Jörg Rädler
 
 [LOADER]
@@ -9,12 +9,12 @@ name = TextFile
 minVer = 0.1
 maxVer = 2.0
 
-[TEMPLATE_1]
+[TEMPLATE_NUMB]
 topFile = numberlines.tmpl
 type = mako
-ext = .foo
+ext = .numbered
 
-[TEMPLATE_2]
-topFile = numberlines.tmpl
+[TEMPLATE_STAT]
+topFile = statistics.tmpl
 type = mako
-ext = .bar
+ext = .statistics
