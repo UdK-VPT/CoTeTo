@@ -15,6 +15,12 @@ the folder search using different ways:
   `.CoTeTo.cfg` in the users home folder
 3. The `-d` switch on the CLI or GUI
 
+Two more folders are searched by default (if they exist):
+1. The folder `Generators` in the parent folder (one level up) of the CoTeTo 
+   module package. This enables CoTeTo to run without installation.
+2. The folder `CoTeTo_Generators` two levels up of the CoTeTo module package.
+   This allows CoTeTo to be a submodule in git and the generators to be 
+   stored in a parallel folder. 
 
 Contents of a Generator
 -----------------------

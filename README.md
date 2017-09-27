@@ -9,17 +9,16 @@ Documentation will be incomplete or missing and the software may not run properl
 
 Concept
 -------
-CoTeTo manages a list of generators and data APIs.
+CoTeTo manages a list of generators and data loaders.
 A generator is a package (contained in folder or a zip file) that contains output specific elements:
 
 - general information in file `Package.inf` (Windows ini-file syntax)
-- mapping rule files in folder `MappingRules`
 - preprocessor / filter function in folder `Filter`
 - template files (mako) in file `Templates`
 
 Generators are loaded from a list of folders.
-Each generator (defined by a name and a version number in Package.inf) depends on a specific data API.
-Data APIs are python modules loaded from the module package `CoTeTo_DataAPI`.
+Each generator (defined by a name and a version number in Package.inf) depends on a specific loader.
+Loaders are python modules loaded from the module package `CoTeTo.Loaders` or from the generator.
 
 Dependencies
 ------------
@@ -60,11 +59,10 @@ This is the main python module package. It should be installed in your python
 search path, this is usually done during the installation. This package contains
 the core functions of CoTeTo.
 
-### Package: CoTeTo_DataAPI
-This is a python module package containing the data APIs. Developers will
+### Package: CoTeTo.Loaders
+This is a python module package containing the data loaders. Developers will
 probably need to edit and amend these modules. If you add new modules, you need
-to list them in `__init__.py`. The package should be installed
-in your python search path, this is usually done during the installation.
+to list them in `__init__.py`. 
 
 ### Folder: Generators
 This folder contains the predefined generators. You can copy this to your
@@ -73,7 +71,7 @@ generators.
 
 ### Executable Scripts
 The scripts give you an interface to CoTeTo on the command line or in a graphical
-environment. The scripts require the packages `CoTeTo` and `CoTeTo_DataAPI`. Call
+environment. The scripts require the packages `CoTeTo` and `CoTeTo.Loaders`. Call
 the scripts with the `--help` switch to get some usage information.
 
 ### Tools
