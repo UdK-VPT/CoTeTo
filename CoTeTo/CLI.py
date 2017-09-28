@@ -10,11 +10,9 @@ import argparse
 import configparser
 from CoTeTo.Controller import Controller
 
-descr = """
-CoTeTo is a tool to generate source code from data sources.
-It is developed in the EnEff-BIM project to generate Modelica code from SimModel data.
-CoTeTo-cli is the command line interface to CoTeTo. CoTeTo-gui provides a graphical interface."""
-
+descr = """CoTeTo is a tool for the generation of source code and other text from
+different data sources. It can be easily extended, runs with a GUI, a
+commandline interface or can be integrated in other python projects as a module."""
 
 nl = os.linesep
 

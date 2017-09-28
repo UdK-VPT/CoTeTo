@@ -1,26 +1,45 @@
 # CoTeTo - Code Templating Tool
-CoTeTo is a tool for the generation of source code and other text from different data sources.
+CoTeTo is a tool for the generation of source code and other text from different
+data sources. It can be easily extended, runs with a GUI, a commandline interface
+or can be integrated in other python projects as a module.
 
-This software is work-in-progress. Documentation may be incomplete or missing and the software may not run properly.
+**This software is work-in-progress. Documentation may be incomplete or missing
+and the software may not run properly. Different components of CoTeTo will 
+execute arbitrary code from different sources. It's very easy to hide
+malicious code in filters or templates. Use CoTeTo at your own risk!**
 
 ## Concept
+CoTeTo uses components called **loaders** to read or generate the data
+structures, optional **filters** to manipulate the data and **templates** to
+generate the formatted output. **Generators** are the documents of the CoTeTo
+system. A generator is a flexible container with filters, templates and
+additional information. A set of standard loaders is provided with CoTeTo, but
+containers can also store and use custom loaders.
+
 CoTeTo manages a list of generators and data loaders.
-A generator is a package (contained in folder or a zip file) that contains output specific elements:
+A generator is a package (contained in folder or a zip file) that contains
+output specific elements:
 
 - general information in file `Package.inf` (Windows ini-file syntax)
-- preprocessor / filter function in folder `Filter`
 - template files (mako) in file `Templates`
+- preprocessor / filter function in folder `Filter` (optional)
+- loader code in the folder `Loaders` (optional)
+- additional files for the project - not uses by CoTeTo (optional)
 
-Generators are loaded from a list of folders.
-Each generator (defined by a name and a version number in Package.inf) depends on a specific loader.
-Loaders are python modules loaded from the module package `CoTeTo.Loaders` or from the generator.
+Generators are loaded from a list of folders. Each generator (defined by a name
+and a version number in Package.inf) depends on a specific loader. Loaders are
+python modules loaded from the module package `CoTeTo.Loaders` or from the
+generator.
 
 ## Dependencies
 1. CoTeTo works with vanilla Python 32bit or 64bit version >=3.5 .
-[WinPython](http://winpython.github.io/) is recommended, because it includes most packages.
+[WinPython](http://winpython.github.io/) is recommended, because it includes
+most packages.
 3. WinPython does not include the Mako templating engine,
 install it by running `pip install -U mako` on a Python-enabled command prompt
-4. If you are not using WinPython, you also need to install the Jinja2 templating engine by running `pip install -U jinja2` on a Python-enabled command prompt
+4. If you are not using WinPython, you also need to install the Jinja2
+templating engine by running `pip install -U jinja2` on a Python-enabled command
+prompt
 
 You can check these dependencies by running the script
 `tools/dependency_check.py` if you already have a python interpreter installed.
