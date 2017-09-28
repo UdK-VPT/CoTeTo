@@ -2,7 +2,7 @@
 name = TestMultiOutput
 version = 0.1
 description = Output the lines of the input files with line numbers added, generate a file with some statistics
-author = Jörg Rädler
+author = Joerg Raedler
 
 [LOADER]
 name = TextFile
