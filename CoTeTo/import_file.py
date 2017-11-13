@@ -10,8 +10,8 @@ def import_file(module_path='', module=''):
         del sys.modules[module]
     sys.path.insert(0, module_path)
     loader = importlib.find_loader(module)
-    del sys.path[0]
     m = loader.load_module(module)
+    del sys.path[0]
     return m
 
 if __name__ == '__main__':
