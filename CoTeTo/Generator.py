@@ -128,7 +128,7 @@ class Generator(object):
                     self.loader.isCustom = True
         else:
             # use the standard loaders
-            for loader in self.controller.loaders.values():
+            for loader in list(self.controller.loaders.values()):
                 if lcfg.get('name') == loader.name:
                     if (lcfg.get('minVer', '000') <= loader.version) and (lcfg.get('maxVer', '999999') >= loader.version):
                         self.logger.debug('GEN | found loader: %s::%s', loader.name, loader.version)
