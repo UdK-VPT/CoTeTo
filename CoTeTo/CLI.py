@@ -85,7 +85,7 @@ def main():
         o = g.execute(args.data_source)
         if len(o) == 1:
             # single file output
-            ext = o.keys()[0]
+            ext = list(o.keys())[0]
             if args.output:
                 outFile = open(args.output[0] + ext, 'w')
                 outFile.write(o[ext].read())
