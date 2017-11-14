@@ -1,0 +1,20 @@
+#
+#   CoTeTo
+#       Version:  ${systemCfg['version']}
+#       Platform: ${systemCfg['platform']}
+#       Path:     ${systemCfg['path']}
+#       Gen-Path: ${', '.join(systemCfg['generatorPath'])}
+#
+#   Generator
+#       Name:     ${generatorCfg['GENERATOR'].get('name')}
+#       Version:  ${generatorCfg['GENERATOR'].get('version')}
+
+% for u,x in d.items():
+File: ${u}
+% for k,v in x.items():
+  Key:   "${k}"
+  Value: "${v}"
+
+% endfor
+
+% endfor

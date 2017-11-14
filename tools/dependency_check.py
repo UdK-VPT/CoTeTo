@@ -2,7 +2,7 @@
 
 import sys
 
-lb = [('>>> Checking dependencies for the EnEFF/BIM framework <<<',)]
+lb = [('>>> Checking dependencies for CoTeTo <<<',)]
 
 def done(status=0):
     """write linebuffer lb and exit with status"""
@@ -23,18 +23,14 @@ else:
 lb.append(l)
 
 ## Checking python version
-py27 = False
-py33 = False
+py35 = False
 v = sys.version_info
 l = ['Checking python version... ', '.'.join(str(i) for i in v)]
-if v >= (3, 3):
-    py33 = True
+if v >= (3, 5):
+    py35 = True
     l.append('- Ok!')
-elif v >= (2, 7) and v < (3,):
-    py27 = True
-    l.append('Ok!')
 else:
-    l.append('- Please install Python 3.3 or newer and retry!')
+    l.append('- Please install Python 3.5 or newer and retry!')
     lb.append(l)
     done(1)
 lb.append(l)
@@ -65,15 +61,5 @@ try:
 except:
     l.append('- GUI will not run, please install PyQt4 and retry!')
 lb.append(l)
-
-## Checking configparser for python 2.7
-if py27:
-    l = ['Checking backported configparser:python2.7... ']
-    try:
-        from configparser import ConfigParser
-        l.append('Ok!')
-    except:
-        l.append('- Please install configparser and retry (pip install configparser)!')
-    lb.append(l)
 
 done(0)

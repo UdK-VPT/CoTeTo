@@ -1,18 +1,14 @@
 [GENERATOR]
-name = TestJinja2
+name = TestCustomLoaders
 version = 0.1
-description = test the jinja2 engine
+description = test custom loaders - please load test/custom.txt as input
 author = Joerg Raedler jraedler@udk-berlin.de
 
 [LOADER]
-name = TestDummy
+name = MyLoader
+module = MyLoader
 minVer = 0.1
 maxVer = 2.0
 
-[FILTER]
-module = Filter01
-function = filter01
-
 [TEMPLATE]
 topFile = Main.tmpl
-type = jinja2

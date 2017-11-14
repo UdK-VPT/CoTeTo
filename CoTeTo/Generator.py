@@ -4,7 +4,11 @@
 # 201500225 Joerg Raedler jraedler@udk-berlin.de
 #
 
-import os, os.path, zipfile, tempfile, configparser
+import os
+import os.path
+import zipfile
+import tempfile
+import configparser
 
 # mako template engine
 from mako.template import Template
@@ -20,38 +24,33 @@ from CoTeTo.import_file import import_file
 
 # a template for the generator info text as txt and html
 generatorInfoTmpl = {
-'txt' : """
+    'txt' : """
 Name:        ${cfg['GENERATOR'].get('name')}
 Description: ${cfg['GENERATOR'].get('description')}
 Version:     ${cfg['GENERATOR'].get('version')}
 Author:      ${cfg['GENERATOR'].get('author')}
 Path:        ${path}
 
-Data API:
-    requires ${cfg['API'].get('name')}, version ${cfg['API'].get('minVer', '?')}...${cfg['API'].get('maxVer', '?')}
-    % if api:
-    using version ${api.version} from ${api.__file__}
+Data Loader:
+    requires ${cfg['LOADER'].get('name')}, version ${cfg['LOADER'].get('minVer', '?')}...${cfg['LOADER'].get('maxVer', '?')}
+    % if loader:
+    using version ${loader.version}
     % else:
     *** NOT FOUND! ***
     % endif
 
-Main Template:
-    ${cfg['TEMPLATES'].get('topFile')}
+Templates:
+% for t in [s for s in cfg.sections() if s.upper().startswith('TEMPLATE')]:
+    ${cfg[t].get('ext', 'DEFAULT')}: ${cfg[t].get('topFile')}
+% endfor
 
-% if cfg.has_section('PYFILTER'):
+% if cfg.has_section('FILTER'):
 Python filter:
-    ${cfg['PYFILTER'].get('module')}.${cfg['PYFILTER'].get('function')}
-% endif
-
-% if cfg.has_section('MAPRULES'):
-Mapping Rules:
-    % for f in cfg['MAPRULES'].get('files', '').split(','):
-    ${f}
-    % endfor
+    ${cfg['FILTER'].get('module')}.${cfg['FILTER'].get('function')}
 % endif
 """,
 
-'html' : """
+    'html' : """
 <h2>${cfg['GENERATOR'].get('name')} - version ${cfg['GENERATOR'].get('version')}</h2>
 <h3>Author</h3>
 <p>${cfg['GENERATOR'].get('author')}</p>
@@ -60,37 +59,35 @@ Mapping Rules:
 <h3>Path</h3>
 <p><a href="file:${p2u(path)}">${path}</a> </p>
 
-<h3>Data API</h3>
+<h3>Data Loader</h3>
 <p>
-Requires ${cfg['API'].get('name')}, version ${cfg['API'].get('minVer', '?')}...${cfg['API'].get('maxVer', '?')}<br/>
-% if api:
-Found <a href="api://${api.name}___${api.version}">version ${api.version}</a><br/>
+Requires ${cfg['LOADER'].get('name')}, version ${cfg['LOADER'].get('minVer', '?')}...${cfg['LOADER'].get('maxVer', '?')}<br/>
+% if loader:
+% if loader.isCustom:
+    Found version ${loader.version}<br/>
+% else:
+Found <a href="loader://${loader.name}___${loader.version}">version ${loader.version}</a><br/>
+%endif
 % else:
 <b>Not found, generator is not usable!</b><br/>
 % endif
 </p>
 
-<h3>Main Template</h3>
-<p>${cfg['TEMPLATES'].get('topFile')}</p>
-
-% if cfg.has_section('PYFILTER'):
-<h3>Python filter</h3>
-<p>${cfg['PYFILTER'].get('module')}.${cfg['PYFILTER'].get('function')}</p>
-% endif
-
-% if cfg.has_section('MAPRULES'):
-<h3>Mapping Rules</h3>
-<p>
-% for f in cfg['MAPRULES'].get('files', '').split(','):
-${f}<br/>
+<h3>Templates</h3>
+% for t in [s for s in cfg.sections() if s.upper().startswith('TEMPLATE')]:
+<p><b>${cfg[t].get('ext', 'DEFAULT')}:</b> ${cfg[t].get('topFile')} </p>
 % endfor
-</p>
+
+% if cfg.has_section('FILTER'):
+<h3>Python filter</h3>
+<p>${cfg['FILTER'].get('module')}.${cfg['FILTER'].get('function')}</p>
 % endif
 """
 }
 
 
 class Generator(object):
+
     """represents a generator package """
 
     def __init__(self, controller, packagePath=None):
@@ -112,20 +109,35 @@ class Generator(object):
         self.author = g.get('author')
         self.description = g.get('description')
 
-        # check for a usable api
-        acfg = self.cfg['API']
-        self.api = None
-        self.logger.debug('GEN | locate API')
-        for api in self.controller.apis.values():
-            if acfg.get('name') == api.name:
-                if (acfg.get('minVer', '000') <= api.version) and (acfg.get('maxVer', '999999') >= api.version):
-                    self.logger.debug('GEN | found API: %s::%s', api.name, api.version)
-                    self.api = api
+        # check for a usable loader
+        lcfg = self.cfg['LOADER']
+        self.loader = None
+        self.logger.debug('GEN | locate loader')
+        if lcfg.get('module'):
+            # looks like we have a custom class
+            moduleName = lcfg.get('module')
+            className = lcfg.get('name')
+            modulePath = os.path.join(self.packagePath, 'Loaders')
+            self.logger.debug('GEN | import loader module %s', moduleName)
+            module = import_file(modulePath, moduleName)
+            loader = getattr(module, className)
+            if className == loader.name:
+                if (lcfg.get('minVer', '000') <= loader.version) and (lcfg.get('maxVer', '999999') >= loader.version):
+                    self.logger.debug('GEN | found loader: %s::%s', loader.name, loader.version)
+                    self.loader = loader
+                    self.loader.isCustom = True
+        else:
+            # use the standard loaders
+            for loader in list(self.controller.loaders.values()):
+                if lcfg.get('name') == loader.name:
+                    if (lcfg.get('minVer', '000') <= loader.version) and (lcfg.get('maxVer', '999999') >= loader.version):
+                        self.logger.debug('GEN | found loader: %s::%s', loader.name, loader.version)
+                        self.loader = loader
 
     def infoText(self, fmt='txt'):
         """return information on this generator in text form"""
         t = Template(generatorInfoTmpl[fmt])
-        return t.render(cfg=self.cfg, path=self.packagePath, api=self.api, p2u=self.controller.pathname2url)
+        return t.render(cfg=self.cfg, path=self.packagePath, loader=self.loader, p2u=self.controller.pathname2url)
 
     def getReadableFile(self, name, folder=''):
         """return a readable file-like object from package folder or zip"""
@@ -143,13 +155,6 @@ class Generator(object):
             s = open(os.path.join(self.packagePath, folder, name), 'r').read()
         return s
 
-    def getMappingRules(self):
-        """return list of files to read mapping rules from"""
-        if self.cfg.has_section('MAPRULES'):
-            return [self.getReadableFile(f, 'MappingRules') for f in self.cfg['MAPRULES'].get('files', '').split(',') if f]
-        else:
-            return []
-
     def getTemplateFolder(self):
         """return template folder, for zip packages extract to temporary folder first"""
         if not self.zf:
@@ -164,35 +169,50 @@ class Generator(object):
             f.close()
         return self.tempDir.name
 
-    def executeDataAPI(self, uriList=[]):
-        """execute the dataAPI to fetch data from the source"""
-        self.logger.debug('GEN | calling data api')
-        self.data = self.api.fetchData(uriList, self.controller.systemCfg,
-            self.cfg, self.logger)
+    def executeLoader(self, uriList=[]):
+        """execute the loader to fetch data from the source"""
+        self.logger.debug('GEN | calling loader')
+        l = self.loader(self.controller.systemCfg, self.cfg, self.logger)
+        self.data = l(uriList)
 
-    def executePyFilter(self):
+    def executeFilter(self):
         """execute the python filter to manipulate loaded data"""
-        moduleName = self.cfg['PYFILTER'].get('module')
-        functionName = self.cfg['PYFILTER'].get('function')
+        moduleName = self.cfg['FILTER'].get('module')
+        functionName = self.cfg['FILTER'].get('function')
         modulePath = os.path.join(self.packagePath, 'Filters')
-        self.logger.debug('GEN | import pyfilter module %s', moduleName)
+        self.logger.debug('GEN | import filter module %s', moduleName)
         module = import_file(modulePath, moduleName)
-        self.logger.debug('GEN | calling pyfilter function %s', functionName)
+        self.logger.debug('GEN | calling filter function %s', functionName)
         function = getattr(module, functionName)
         function(self.data, self.controller.systemCfg, self.cfg, self.logger)
 
     def executeTemplates(self):
-        """execeute the templates with the data, return the output buffer"""
-        tmplType = self.cfg['TEMPLATES'].get('type', 'mako')
+        """execeute all templates, return the output buffers and extensions"""
+        tmpls = [s for s in self.cfg.sections() if s.upper().startswith('TEMPLATE')]
+        tmpls.sort() # execute template sections in alphabetical order
+        txt = {}
+        for tmpl in tmpls:
+            ext = self.cfg[tmpl].get('ext', '')
+            if ext in txt:
+                while ext in txt:
+                    ext.append('X')
+                self.logger.error('GEN | file extension already exists, using %s!' % ext)
+            self.logger.debug('GEN | processing template setup ' + tmpl)
+            txt[ext] = self.executeTemplate(tmpl)
+        return txt
+
+    def executeTemplate(self, name):
+        """execeute a single template with the data, return the output buffer"""
+        tmplType = self.cfg[name].get('type', 'mako')
         if tmplType == 'mako':
             self.logger.debug('GEN | calling mako template')
             tLookup = TemplateLookup(directories=[self.getTemplateFolder()])
             template = Template("""<%%include file="%s"/>""" %
-                self.cfg['TEMPLATES'].get('topFile'),
-                lookup=tLookup, strict_undefined=True)
+                                self.cfg[name].get('topFile'),
+                                lookup=tLookup, strict_undefined=True)
             buf = StringIO()
-            ctx = Context(buf, _systemCfg=self.controller.systemCfg,
-                _generatorCfg=self.cfg, _logger=self.logger, **self.data)
+            ctx = Context(buf, d=self.data, systemCfg=self.controller.systemCfg,
+                          generatorCfg=self.cfg, logger=self.logger)
             template.render_context(ctx)
             buf.flush()
             buf.seek(0)
@@ -200,24 +220,25 @@ class Generator(object):
         elif tmplType == 'jinja2':
             self.logger.debug('GEN | calling jinja2 template')
             env = Environment(loader=FileSystemLoader(self.getTemplateFolder()))
-            template = env.get_template(self.cfg['TEMPLATES'].get('topFile'))
-            self.data['_systemCfg'] = self.controller.systemCfg
-            self.data['_generatorCfg'] = self.cfg
-            self.data['_logger'] = self.logger
-            tmp = template.render(self.data)
+            template = env.get_template(self.cfg[name].get('topFile'))
+            ns = {'d': self.data}
+            ns['systemCfg'] = self.controller.systemCfg
+            ns['generatorCfg'] = self.cfg
+            ns['logger'] = self.logger
+            tmp = template.render(ns)
             buf = StringIO(tmp)
             return(buf)
         else:
-            raise Exception('Unknown template system: '+tmplType)
+            raise Exception('Unknown template system: ' + tmplType)
 
     def execute(self, uriList=[]):
-        if not self.api:
+        if not self.loader:
             raise Exception('Generator is not valid - canceling execution!')
-        # fill data model from the api using the data URIs
-        self.executeDataAPI(uriList)
+        # fill data model from the loader using the data URIs
+        self.executeLoader(uriList)
         # apply filter
-        if self.cfg.has_section('PYFILTER'):
-            self.executePyFilter()
+        if self.cfg.has_section('FILTER'):
+            self.executeFilter()
         # handle data to template, return text buffer
         return self.executeTemplates()
 
