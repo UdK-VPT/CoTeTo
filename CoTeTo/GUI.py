@@ -296,7 +296,7 @@ class CoTeToWidget(QtWidgets.QWidget):
                 c.set(p, 'generator', generator)
                 with open(c.path, 'w') as configfile:
                     c.write(configfile)
-            except:
+            except BaseException:
                 # silently ignore errors
                 # FIXME: is this a good idea? But where should the errors appear?
                 pass

@@ -46,7 +46,7 @@ class Loader(object):
         self.logger.debug('LDR | creating instance of loader %s' % self.name)
         try:
             self.setup()
-        except:
+        except BaseException:
             self.logger.exception('LDR | error during setup')
 
     def setup(self):
@@ -61,7 +61,7 @@ class Loader(object):
         self.logger.debug('LDR | executing loader %s with uriList: %s' % (self.name, uriList))
         try:
             return self.load(uriList)
-        except:
+        except BaseException:
             self.logger.exception('LDR | error during execution/load')
 
     # make class callable

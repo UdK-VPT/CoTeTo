@@ -42,7 +42,7 @@ l = ['Checking mako template engine... ']
 try:
     from mako.template import Template
     l.append('Ok!')
-except:
+except BaseException:
     l.append('- Please install mako and retry (pip install mako)!')
 lb.append(l)
 
@@ -51,7 +51,7 @@ l = ['Checking jinja2 template engine... ']
 try:
     from jinja2 import Environment
     l.append('Ok!')
-except:
+except BaseException:
     l.append('- Please install jinja2 and retry (pip install jinja2)!')
 lb.append(l)
 
@@ -60,7 +60,7 @@ l = ['Checking PyQt5... ']
 try:
     from PyQt5 import QtGui
     l.append('Ok!')
-except:
+except BaseException:
     l.append('- GUI will not run, please install PyQt5 and retry!')
 lb.append(l)
 

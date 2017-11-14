@@ -188,8 +188,7 @@ class Generator(object):
 
     def executeTemplates(self):
         """execeute all templates, return the output buffers and extensions"""
-        tmpls = [s for s in self.cfg.sections() if s.upper().startswith('TEMPLATE')]
-        tmpls.sort()  # execute template sections in alphabetical order
+        tmpls = sorted([s for s in self.cfg.sections() if s.upper().startswith('TEMPLATE')])
         txt = {}
         for tmpl in tmpls:
             ext = self.cfg[tmpl].get('ext', '')

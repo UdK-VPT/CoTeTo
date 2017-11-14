@@ -8,7 +8,7 @@
 def filter01(d, systemCfg, generatorCfg, logger):
 
     # spread a message
-    logger.debug('hi there! This is a filter running from module: '+__file__)
+    logger.debug('hi there! This is a filter running from module: ' + __file__)
 
     x = d['dummy']
 
