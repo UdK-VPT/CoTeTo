@@ -24,7 +24,7 @@ from CoTeTo.import_file import import_file
 
 # a template for the generator info text as txt and html
 generatorInfoTmpl = {
-    'txt' : """
+    'txt': """
 Name:        ${cfg['GENERATOR'].get('name')}
 Description: ${cfg['GENERATOR'].get('description')}
 Version:     ${cfg['GENERATOR'].get('version')}
@@ -50,7 +50,7 @@ Python filter:
 % endif
 """,
 
-    'html' : """
+    'html': """
 <h2>${cfg['GENERATOR'].get('name')} - version ${cfg['GENERATOR'].get('version')}</h2>
 <h3>Author</h3>
 <p>${cfg['GENERATOR'].get('author')}</p>
@@ -189,7 +189,7 @@ class Generator(object):
     def executeTemplates(self):
         """execeute all templates, return the output buffers and extensions"""
         tmpls = [s for s in self.cfg.sections() if s.upper().startswith('TEMPLATE')]
-        tmpls.sort() # execute template sections in alphabetical order
+        tmpls.sort()  # execute template sections in alphabetical order
         txt = {}
         for tmpl in tmpls:
             ext = self.cfg[tmpl].get('ext', '')

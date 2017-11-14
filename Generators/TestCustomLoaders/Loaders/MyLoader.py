@@ -6,6 +6,7 @@
 from CoTeTo.Loader import Loader
 from os.path import isfile
 
+
 class MyLoader(Loader):
     name = 'MyLoader'
     description = 'custom loader for custom files'

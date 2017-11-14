@@ -5,7 +5,8 @@
 # 20170602 Joerg Raedler jraedler@udk-berlin.de
 #
 
-import os, sys
+import os
+import sys
 
 # check if we are running in the development folder
 parent = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))

@@ -9,14 +9,14 @@ from urllib.request import pathname2url
 
 # a template for the loader info text as txt and html
 loaderInfoTmpl = {
-    'txt' : """
+    'txt': """
 Name:        ${name}
 Description: ${description}
 Version:     ${version}
 Author:      ${author}
 Path:        ${filename}
 """,
-    'html' : """
+    'html': """
 <h2>${name} - version ${version}</h2>
 <h3>Author</h3>
 <p>${author}</p>

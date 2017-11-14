@@ -4,6 +4,7 @@
 #   generatorCfg - generator configuration
 #   logger - a logger instance
 
+
 def filter01(d, systemCfg, generatorCfg, logger):
 
     # spread a message

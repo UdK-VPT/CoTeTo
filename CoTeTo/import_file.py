@@ -14,6 +14,7 @@ def import_file(module_path='', module=''):
     del sys.path[0]
     return m
 
+
 if __name__ == '__main__':
     # test this module with path and module name as arguments
     # will print modules namespace (without __builtins__)
