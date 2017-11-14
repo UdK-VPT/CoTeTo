@@ -53,13 +53,13 @@ except:
     l.append('- Please install jinja2 and retry (pip install jinja2)!')
 lb.append(l)
 
-## Checking PyQt4
-l = ['Checking PyQt4... ']
+## Checking PyQt5
+l = ['Checking PyQt5... ']
 try:
-    from PyQt4 import QtGui
+    from PyQt5 import QtGui
     l.append('Ok!')
 except:
-    l.append('- GUI will not run, please install PyQt4 and retry!')
+    l.append('- GUI will not run, please install PyQt5 and retry!')
 lb.append(l)
 
 done(0)
