@@ -101,8 +101,8 @@ class Generator(object):
         else:
             self.zf = None
         self.cfg = configparser.ConfigParser()
-        self.logger.debug('GEN | read Package.ini')
-        self.cfg.read_file(self.getReadableFile('Package.inf'))
+        self.logger.debug('GEN | read Package.inf')
+        self.cfg.read_string(self.getTextFileContents('Package.inf'))
         g = self.cfg['GENERATOR']
         self.name = g.get('name')
         self.version = g.get('version')
