@@ -14,5 +14,5 @@ module = Filter01
 function = filter01
 
 [TEMPLATE]
-topFile = Main.tmpl
+topFile = Main.mako
 type = mako

@@ -11,4 +11,4 @@
 
 The value of foo is ${d['dummy']['foo']}.
 
-<%include file="Sub.tmpl"/>
+<%include file="Sub.mako"/>
