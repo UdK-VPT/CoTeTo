@@ -9,7 +9,10 @@
 from CoTeTo.Loader import Loader
 from os.path import isfile
 
-from lxml import etree, objectify
+# just placeholders, lxml will be loaded in the setup method of the loader class
+etree = None
+objectify = None
+
 from urllib.request import urlopen
 import re
 from os import path
@@ -124,7 +127,11 @@ class XMLFile(Loader):
     author = 'Werner Kaul we.kaul@udk-berlin.de'
     helptxt = """Load XML files, validate them against xsd schemas (given or referenced by the xml structure), returns a hierarchic dict for each file"""
 
-
+    def setup(self):
+        # try to load lxml, which is not a standard package
+        # placing the import here is to prevent an exception when importing this loader
+        global etree, objectify
+        from lxml import etree, objectify
 
     def load(self, uriList):
         #get XML Schema File (
