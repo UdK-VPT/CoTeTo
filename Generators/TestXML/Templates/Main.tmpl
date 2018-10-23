@@ -1,0 +1,16 @@
+#
+#   CoTeTo
+#       Version:  ${systemCfg['version']}
+#       Platform: ${systemCfg['platform']}
+#       Path:     ${systemCfg['path']}
+#       Gen-Path: ${', '.join(systemCfg['generatorPath'])}
+#
+#   Generator
+#       Name:     ${generatorCfg['GENERATOR'].get('name')}
+#       Version:  ${generatorCfg['GENERATOR'].get('version')}
+
+<%! import json %>
+% for u,x in d.items():
+File: ${u}
+XML: ${json.dumps(x,indent=4)}
+% endfor
