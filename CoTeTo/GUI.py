@@ -266,15 +266,11 @@ class CoTeToWidget(QtWidgets.QWidget):
             self.outputInput.setText(outputBase)
         if not os.path.isabs(outputBase):
             outputBase = os.path.abspath(outputBase)
-        x = self.activeGenerator.execute(uriList)
-        for ext in x:
-            outputFile = outputBase + ext
-            o = open(outputFile, 'w')
-            o.write(x[ext].read())
-            o.close()
-            if self.openOutputButton.isChecked():
-                QtGui.QDesktopServices.openUrl(QtCore.QUrl.fromLocalFile(outputFile))
-
+        x = self.activeGenerator.execute(uriList, outputBase)
+        if self.openOutputButton.isChecked():
+           for ext in x:
+               QtGui.QDesktopServices.openUrl(QtCore.QUrl.fromLocalFile(x[ext]))
+ 
     def closeEvent(self, e):
         # first reset output streams to standard settings
         XStream.reset()
