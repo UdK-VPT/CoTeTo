@@ -250,11 +250,8 @@ class Generator(object):
         # apply filter
         if self.cfg.has_section('FILTER'):
             self.executeFilter()
-        # handle data to template, return text buffer
-        if outputBasename is None:
-            return self.executeTemplates()
-        else:
-            return self.executeTemplatesWrite(outputBasename)
+        # handle data to templates, return text buffers or file names
+        return self.executeTemplates(outputBasename)
 
 
     # make the generator executable
