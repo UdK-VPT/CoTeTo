@@ -189,17 +189,39 @@ class Generator(object):
     def executeTemplates(self):
         """execeute all templates, return the output buffers and extensions"""
         tmpls = sorted([s for s in self.cfg.sections() if s.upper().startswith('TEMPLATE')])
-        txt = {}
+        res = {}
         for tmpl in tmpls:
             ext = self.cfg[tmpl].get('ext', '')
-            if ext in txt:
-                while ext in txt:
+            if ext in res:
+                while ext in res:
                     ext.append('X')
                 self.logger.error('GEN | file extension already exists, using %s!' % ext)
             self.logger.debug('GEN | processing template setup ' + tmpl)
-            txt[ext] = self.executeTemplate(tmpl)
-        return txt
+            res[ext] = self.executeTemplate(tmpl)
+        return res
 
+    def executeWriteTemplates(self, outputBasename):
+        """execeute all templates and save the content to files, return the output file names and extensions"""
+        tmpls = sorted([s for s in self.cfg.sections() if s.upper().startswith('TEMPLATE')])
+        res = {}
+        if not os.path.isabs(outputBasename):
+            outputBasename = os.path.abspath(outputBasename)
+        for tmpl in tmpls:
+            self.logger.debug('GEN | processing template setup ' + tmpl)
+            buf = self.executeTemplate(tmpl)
+            ext = self.cfg[tmpl].get('ext', '')
+            if ext in res:
+                while ext in res:
+                    ext.append('X')
+                self.logger.error('GEN | file extension already exists, using %s!' % ext)
+            outputFilename = outputBasename + ext
+            o = open(outputFilename, 'w')
+            o.write(buf.read())
+            o.close()
+            # buf.close() ?
+            res[ext] = outputFilename
+        return res
+        
     def executeTemplate(self, name):
         """execeute a single template with the data, return the output buffer"""
         tmplType = self.cfg[name].get('type', 'mako')
