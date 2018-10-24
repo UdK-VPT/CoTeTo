@@ -186,8 +186,9 @@ class Generator(object):
         function = getattr(module, functionName)
         function(self.data, self.controller.systemCfg, self.cfg, self.logger)
 
-    def executeTemplates(self):
-        """execeute all templates, return the output buffers and extensions"""
+    def executeTemplates(self, outputBasename=None):
+        """execeute all templates, return the output buffers and extensions -
+        if outputBasename is given, save file and return file names instead of the buffers"""
         tmpls = sorted([s for s in self.cfg.sections() if s.upper().startswith('TEMPLATE')])
         res = {}
         for tmpl in tmpls:
@@ -196,32 +197,21 @@ class Generator(object):
                 while ext in res:
                     ext.append('X')
                 self.logger.error('GEN | file extension already exists, using %s!' % ext)
-            self.logger.debug('GEN | processing template setup ' + tmpl)
-            res[ext] = self.executeTemplate(tmpl)
-        return res
-
-    def executeWriteTemplates(self, outputBasename):
-        """execeute all templates and save the content to files, return the output file names and extensions"""
-        tmpls = sorted([s for s in self.cfg.sections() if s.upper().startswith('TEMPLATE')])
-        res = {}
-        if not os.path.isabs(outputBasename):
-            outputBasename = os.path.abspath(outputBasename)
-        for tmpl in tmpls:
             self.logger.debug('GEN | processing template setup ' + tmpl)
             buf = self.executeTemplate(tmpl)
-            ext = self.cfg[tmpl].get('ext', '')
-            if ext in res:
-                while ext in res:
-                    ext.append('X')
-                self.logger.error('GEN | file extension already exists, using %s!' % ext)
-            outputFilename = outputBasename + ext
-            o = open(outputFilename, 'w')
-            o.write(buf.read())
-            o.close()
-            # buf.close() ?
-            res[ext] = outputFilename
+            if outputBasename is None:
+                # return buffer
+                res[ext] = buf
+            else:
+                # save file and return file name
+                fname = outputBasename + ext
+                o = open(fname, 'w')
+                o.write(buf.read())
+                o.close()
+                # buf.close() ?
+                res[ext] = fname
         return res
-        
+
     def executeTemplate(self, name):
         """execeute a single template with the data, return the output buffer"""
         tmplType = self.cfg[name].get('type', 'mako')
@@ -252,7 +242,7 @@ class Generator(object):
         else:
             raise Exception('Unknown template system: ' + tmplType)
 
-    def execute(self, uriList=[]):
+    def execute(self, uriList=[], outputBasename = None):
         if not self.loader:
             raise Exception('Generator is not valid - canceling execution!')
         # fill data model from the loader using the data URIs
@@ -261,7 +251,11 @@ class Generator(object):
         if self.cfg.has_section('FILTER'):
             self.executeFilter()
         # handle data to template, return text buffer
-        return self.executeTemplates()
+        if outputBasename is None:
+            return self.executeTemplates()
+        else:
+            return self.executeTemplatesWrite(outputBasename)
+
 
     # make the generator executable
     __call__ = execute
