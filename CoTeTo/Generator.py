@@ -210,6 +210,14 @@ class Generator(object):
                 o.close()
                 # buf.close() ?
                 res[ext] = fname
+                # post execution cmd?
+                cmd = self.cfg[tmpl].get('postExec', '')
+                if cmd:
+                    self.logger.debug('GEN | starting postExec command: %s: ', cmd)
+                    try:
+                        exec(cmd, globals(), locals())
+                    except BaseException:
+                        self.logger.exception('GEN | error during postExec: %s: ', cmd)
         return res
 
     def executeTemplate(self, name):
