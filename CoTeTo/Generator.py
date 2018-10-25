@@ -202,6 +202,8 @@ class Generator(object):
             if outputBasename is None:
                 # return buffer
                 res[ext] = buf
+                if self.cfg[tmpl].get('postExec', ''):
+                    self.logger.error('GEN | postExec defined but saving to buffer instead of file: skipping postExec in ' + tmpl)
             else:
                 # save file and return file name
                 fname = outputBasename + ext
