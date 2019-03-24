@@ -9,10 +9,12 @@ import os
 import os.path
 import zipfile
 import logging
+import platform
+import getpass
+import time
 import CoTeTo
 from CoTeTo.Generator import Generator
 from urllib.request import pathname2url
-
 
 class Controller(object):
 
@@ -29,9 +31,16 @@ class Controller(object):
         self.logger.info('Starting CoTeTo.Controller from file %s, version %s', __file__, CoTeTo.__version__)
         # create system configuration dict - will be available to subsystems
         self.systemCfg = {
+            # static entries:
             'platform': sys.platform,
             'version': CoTeTo.__version__,
             'path': os.path.dirname(os.path.realpath(__file__)),
+            'fullplatform': platform.platform(),
+            'hostname': platform.node(),
+            'username': getpass.getuser(),
+            # functions:
+            'timestamp': time.asctime,
+            'infostamp': lambda: '%s | %s@%s | %s | CoTeTo %s' % (time.asctime(), getpass.getuser(), platform.node(), platform.platform(), CoTeTo.__version__)
             # need more here?
         }
         self.pathname2url = pathname2url
