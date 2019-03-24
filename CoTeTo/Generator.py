@@ -186,19 +186,41 @@ class Generator(object):
         function = getattr(module, functionName)
         function(self.data, self.controller.systemCfg, self.cfg, self.logger)
 
-    def executeTemplates(self):
-        """execeute all templates, return the output buffers and extensions"""
+    def executeTemplates(self, outputBasename=None):
+        """execeute all templates, return the output buffers and extensions -
+        if outputBasename is given, save file and return file names instead of the buffers"""
         tmpls = sorted([s for s in self.cfg.sections() if s.upper().startswith('TEMPLATE')])
-        txt = {}
+        res = {}
         for tmpl in tmpls:
             ext = self.cfg[tmpl].get('ext', '')
-            if ext in txt:
-                while ext in txt:
+            if ext in res:
+                while ext in res:
                     ext.append('X')
                 self.logger.error('GEN | file extension already exists, using %s!' % ext)
             self.logger.debug('GEN | processing template setup ' + tmpl)
-            txt[ext] = self.executeTemplate(tmpl)
-        return txt
+            buf = self.executeTemplate(tmpl)
+            if outputBasename is None:
+                # return buffer
+                res[ext] = buf
+                if self.cfg[tmpl].get('postExec', ''):
+                    self.logger.error('GEN | postExec defined but saving to buffer instead of file: skipping postExec in ' + tmpl)
+            else:
+                # save file and return file name
+                fname = outputBasename + ext
+                o = open(fname, 'w')
+                o.write(buf.read())
+                o.close()
+                # buf.close() ?
+                res[ext] = fname
+                # post execution cmd?
+                cmd = self.cfg[tmpl].get('postExec', '')
+                if cmd:
+                    self.logger.debug('GEN | starting postExec command: %s: ', cmd)
+                    try:
+                        exec(cmd, globals(), locals())
+                    except BaseException:
+                        self.logger.exception('GEN | error during postExec: %s: ', cmd)
+        return res
 
     def executeTemplate(self, name):
         """execeute a single template with the data, return the output buffer"""
@@ -230,7 +252,7 @@ class Generator(object):
         else:
             raise Exception('Unknown template system: ' + tmplType)
 
-    def execute(self, uriList=[]):
+    def execute(self, uriList=[], outputBasename = None):
         if not self.loader:
             raise Exception('Generator is not valid - canceling execution!')
         # fill data model from the loader using the data URIs
@@ -238,8 +260,9 @@ class Generator(object):
         # apply filter
         if self.cfg.has_section('FILTER'):
             self.executeFilter()
-        # handle data to template, return text buffer
-        return self.executeTemplates()
+        # handle data to templates, return text buffers or file names
+        return self.executeTemplates(outputBasename)
+
 
     # make the generator executable
     __call__ = execute

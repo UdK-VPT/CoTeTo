@@ -82,24 +82,18 @@ def main():
 
     elif args.data_source:
         # execute the generator
-        o = g.execute(args.data_source)
-        if len(o) == 1:
-            # single file output
-            ext = list(o.keys())[0]
-            if args.output:
-                outFile = open(args.output[0] + ext, 'w')
-                outFile.write(o[ext].read())
-                outFile.close()
-            else:
-                sys.stdout.write(o[ext].read())
+        if args.output:
+            # output to files: let the generator handle file saving
+            g.execute(args.data_source, args.output[0])
         else:
-            # multi file output
-            if args.output:
-                for ext in o:
-                    outFile = open(args.output[0] + ext, 'w')
-                    outFile.write(o[ext].read())
-                    outFile.close()
+            # print to stdout
+            o = g.execute(args.data_source)
+            if len(o) == 1:
+                # single file output
+                ext = list(o.keys())[0]
+                sys.stdout.write(o[ext].read())
             else:
+                # files separated by a line
                 for ext in o:
                     sys.stdout.write('### FILE: %s\n' % ext)
                     sys.stdout.write(o[ext].read())
