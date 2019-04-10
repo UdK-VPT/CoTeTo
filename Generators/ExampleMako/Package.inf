@@ -1,0 +1,18 @@
+[GENERATOR]
+name = ExampleMako
+version = 1.0
+description = Example using the mako engine
+author = Joerg Raedler jraedler@udk-berlin.de
+
+[LOADER]
+name = TestDummy
+minVer = 0.1
+maxVer = 2.0
+
+[FILTER]
+module = Filter01
+function = filter01
+
+[TEMPLATE]
+topFile = Main.mako
+type = mako
