@@ -1,4 +1,6 @@
 #
+#  The following objects can be used in templates: 
+#
 #  systemCfg - dictionary with information on the system and the environment
 #    Keys:          ${' '.join(systemCfg.keys())}
 #    CoTeToVersion: ${systemCfg['version']}
@@ -16,9 +18,12 @@
 #    Sections:      ${' '.join(generatorCfg.keys())}
 #    Name:          ${generatorCfg['GENERATOR'].get('name')}
 #    Version:       ${generatorCfg['GENERATOR'].get('version')}
+#    access to custom sections and values is also possible:
+#    Answer:        ${generatorCfg['MYCUSTOMSETTINGS'].getint('answer')}
 #
 #  logger - an object to send logging messages
-#    this will not output None, but log a message: ${logger.info('The answer is 42!')}
+#    this will output None, but log a message: ${logger.info('The answer is 42!')}
+#    suppress the output with this trick: ${logger.info('But what was the question?') or ''}
 #
 #  d - the data object read from the loader and (optionally) manipulated by the filter
 #    (this is usually a dictionary of the form filename : data_items, 

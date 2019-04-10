@@ -16,3 +16,6 @@ function = filter01
 [TEMPLATE]
 topFile = Main.mako
 type = mako
+
+[MYCUSTOMSETTINGS]
+answer = 42
