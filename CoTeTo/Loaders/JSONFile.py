@@ -20,7 +20,8 @@ class JSONFile(Loader):
         for u in uriList:
             if isfile(u):
                 self.logger.info('JSONFile - loading %s', u)
-                data[u] = load(open(u, 'r'))
+                with open(u, 'r') as f:
+                    data[u] = load(f)
             else:
                 data[u] = None
                 self.logger.error('JSONFile - file not readable %s', u)

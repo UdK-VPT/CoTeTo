@@ -20,7 +20,7 @@ class CSVFile(Loader):
         for u in uriList:
             if isfile(u):
                 self.logger.info('CSVFile - loading %s', u)
-                with open(u, r) as f:
+                with open(u, 'r') as f:
                     dialect = Sniffer().sniff(f.read(1024))
                     f.seek(0)
                     data[u] = DictReader(f, dialect)
