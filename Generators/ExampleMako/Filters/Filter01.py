@@ -5,10 +5,10 @@
 #   logger - a logger instance
 
 
-def filter01(d, systemCfg, generatorCfg, logger):
+def myfilter(d, systemCfg, generatorCfg, logger):
 
     # spread a message
-    logger.debug('hi there! This is a filter running from module: ' + __file__)
+    logger.debug('Hi there! This is a filter running from module: ' + __file__)
 
     x = d['dummy']
 

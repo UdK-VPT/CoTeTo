@@ -16,7 +16,7 @@
 #    Infostamp:     ${systemCfg['infostamp']()}
 #
 #  generatorCfg - configparser object with information on the used generator
-#    (this is contents of the Package.inf file)
+#    (this is basically the contents of the Package.inf file)
 #    Sections:      ${' '.join(generatorCfg.keys())}
 #    Name:          ${generatorCfg['GENERATOR'].get('name')}
 #    Version:       ${generatorCfg['GENERATOR'].get('version')}
@@ -33,7 +33,7 @@
 #     but this depends on the loader and filter code)  
 #    Keys (Filenames/URIs):    ${' '.join(d.keys())}
 
-The value of foo is ${d['dummy']['foo']}.
+The value of foo is ${d['dummy']['foo']}. Please notice this value was manipulated by a filter function.
 
 ## Templates can be splitted and included:
 <%include file="Sub.mako"/>
