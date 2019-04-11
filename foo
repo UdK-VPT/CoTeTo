@@ -1,0 +1,22 @@
+#
+#   CoTeTo
+#       Version:  0.99
+#       Platform: win32
+#       Path:     C:\Users\jraedler\Devel\CoTeTo\CoTeTo
+#       Gen-Path: C:\Users\jraedler\Devel\CoTeTo\Generators, C:\Users\jraedler\Devel\CoTeTo_Generators
+#
+#   Generator
+#       Name:     Example05CustomLoaders
+#       Version:  1.0
+
+File: C:/Users/jraedler/Devel/CoTeTo/test/custom.txt
+  Key:   "foo"
+  Value: "bar"
+
+  Key:   "x"
+  Value: "y:z"
+
+  Key:   "spam"
+  Value: "eggs"
+
+

@@ -1,0 +1,18 @@
+[GENERATOR]
+name = Example05CustomLoaders
+version = 1.0
+description = test custom loaders - please load test/custom.txt as input
+author = Joerg Raedler jraedler@udk-berlin.de
+
+# A set of standard loaders is available in the package CoTeTo.Loaders,
+# but you can include your custom loader code in a generator. If the a value
+# for module is set in the LOADER section, CoTeTo will look for the module in
+# the Loaders folder of the generator. 
+[LOADER]
+name = MyLoader
+module = MyLoader
+minVer = 0.1
+maxVer = 2.0
+
+[TEMPLATE]
+topFile = Main.tmpl
