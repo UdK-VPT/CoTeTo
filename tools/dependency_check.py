@@ -64,4 +64,13 @@ except BaseException:
     l.append('- GUI will not run, please install PyQt5 and retry!')
 lb.append(l)
 
+# Checking lxml
+l = ['Checking lxml... ']
+try:
+    from lxml import etree, objectify
+    l.append('Ok!')
+except BaseException:
+    l.append('- XML loader will not run, you should install lxml and retry!')
+lb.append(l)
+
 done(0)
