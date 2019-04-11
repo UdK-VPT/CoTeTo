@@ -24,11 +24,11 @@ Two more folders are searched by default (if they exist):
 A generator may be:
 
 1. a subfolder or
-2. a zip file (not working correctly at the moment)
+2. a zip file
 
 containing a file Package.inf and a special folder structure.
 
-Documentation will follow soon, please have a look at the examples for now. The
+Documentation may follow soon, please have a look at the examples for now. The
 easiest way to create a generator is to make a copy of an existing generator
 and adjust the contents.
 

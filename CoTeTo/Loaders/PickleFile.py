@@ -20,7 +20,8 @@ class PickleFile(Loader):
         for u in uriList:
             if isfile(u):
                 self.logger.info('PickleFile - loading %s', u)
-                data[u] = load(open(u, 'r'))
+                with open(u, 'r') as f:
+                    data[u] = load(f)
             else:
                 data[u] = None
                 self.logger.error('PickleFile - file not readable %s', u)

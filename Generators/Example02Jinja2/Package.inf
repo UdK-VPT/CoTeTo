@@ -1,0 +1,40 @@
+# This is the main control file of a generator.
+# It follows the syntax defined by pythons configparser module.
+# More information: https://docs.python.org/3/library/configparser.html
+
+# The GENERATOR section defines the main attributes of this generator.
+# The combination of name and version must be unique in your generator path.
+[GENERATOR]
+name = Example02Jinja2
+version = 1.0
+description = Example using the alternative jinja2 engine
+author = Joerg Raedler jraedler@udk-berlin.de
+
+# The LOADER section defines the used loader name and version.
+# This loader must exist in the CoTeTo.Loaders package or must be included
+# in the generator (see ExampleCustomLoader).
+# This example just uses a dummy loader that generates some useless data items and does not need any input!
+[LOADER]
+name = TestDummy
+minVer = 0.1
+maxVer = 2.0
+
+# The optional FILTER section defines a module and function to manipulate the 
+# data received from the loader before it is ued in the templates.
+[FILTER]
+module = MyFilter
+function = myfilter
+
+# The TEMPLATE section defines the file name of the main template.
+# mako is the default engine, but you can use jinja2 instead.
+# To output more than one file you can use multiple sections with different names,
+# see ExampleMultiOutput for details.
+[TEMPLATE]
+topFile = Main.jinja2
+type = jinja2
+
+# All other sections and entries will be ignored by the CoTeTo system, but you can
+# store information here which is available in custom loaders, filters and templates.
+# See ExampleCustomEntries for details.
+[MYCUSTOMSETTINGS]
+answer = 42

@@ -1,0 +1,24 @@
+[GENERATOR]
+name = Example06PostExec
+version = 1.0
+description = Example of the post execution feature
+author = Joerg Raedler jraedler@udk-berlin.de
+
+[LOADER]
+name = TestDummy
+minVer = 0.1
+maxVer = 2.0
+
+[MYCUSTOMSETTINGS]
+answer = 42
+
+# If a value for postExec is defined in a TEMPLATE section, the python command is executed 
+# right after the creation of the file. The variable fname contains the name of the 
+# generated file. This feature can be used to run a compiler on generated code or start 
+# other applications to process/copy/upload the generated file.
+# Be VERY carefull with the postexec feature, it has complete access
+# to the whole namespace and will run this code without checking!
+[TEMPLATE]
+topFile = Main.mako
+type = mako
+postExec = os.system("dir "+fname)

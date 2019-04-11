@@ -3,7 +3,7 @@
 from distutils.core import setup
 
 setup(name='CoTeTo',
-      version='0.99',
+      version='1.0',
       description='Code Templating Tool - code generation framework based on templates',
       author='Joerg Raedler (UdK Berlin)',
       author_email='jraedler@udk-berlin.de',

@@ -1,0 +1,18 @@
+[GENERATOR]
+name = Example03CustomEntries
+version = 1.0
+description = show the usage of custom entries in Package.inf
+author = Joerg Raedler jraedler@udk-berlin.de
+
+# You can add custom sections and entries and use the values in the loader, filter and templates.
+# Everything in this file is available as generatorCfg.
+[FOO_BAR]
+say_hello = 1
+
+[LOADER]
+name = TestDummy
+minVer = 0.1
+maxVer = 2.0
+
+[TEMPLATE]
+topFile = Main.tmpl

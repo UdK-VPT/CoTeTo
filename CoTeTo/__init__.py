@@ -6,9 +6,10 @@
 
 import sys
 
-__version__ = '0.99'
+__version__ = '1.0'
 
 # special hack for mako on windows to correct a nasty line ending problem
+# FIXME: is this still needed?
 if sys.platform.startswith('win'):
     def read_file(path, mode='r'):
         fp = open(path, mode)

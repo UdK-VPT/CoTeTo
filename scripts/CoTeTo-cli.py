@@ -4,6 +4,9 @@
 # This file is part of CoTeTo - a code generation tool
 # 20170602 Joerg Raedler jraedler@udk-berlin.de
 #
+# This is the commandline interface to CoTeTo.
+# Run `python CoTeTo-cli.py --help` to get help on the 
+# commandline options and arguements
 
 import os
 import sys

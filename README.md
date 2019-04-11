@@ -40,6 +40,8 @@ install it by running `pip install -U mako` on a Python-enabled command prompt
 4. If you are not using WinPython, you also need to install the Jinja2
 templating engine by running `pip install -U jinja2` on a Python-enabled command
 prompt
+5. If you want to use the XML loader you need to install the lxml package: 
+`pip install -U lxml`.
 
 You can check these dependencies by running the script
 `tools/dependency_check.py` if you already have a python interpreter installed.
