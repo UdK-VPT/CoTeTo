@@ -5,9 +5,9 @@
 # The GENERATOR section defines the main attributes of this generator.
 # The combination of name and version must be unique in your generator path.
 [GENERATOR]
-name = ExampleMako
+name = ExampleJinja2
 version = 1.0
-description = Example using the default mako engine
+description = Example using the alternative jinja2 engine
 author = Joerg Raedler jraedler@udk-berlin.de
 
 # The LOADER section defines the used loader name and version.
@@ -30,8 +30,8 @@ function = myfilter
 # To output more than one file you can use multiple sections with different names,
 # see ExampleMultiOutput for details.
 [TEMPLATE]
-topFile = Main.mako
-type = mako
+topFile = Main.jinja2
+type = jinja2
 
 # All other sections and entries will be ignored by the CoTeTo system, but you can
 # store information here which is available in custom loaders, filters and templates.

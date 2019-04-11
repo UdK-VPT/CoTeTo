@@ -37,4 +37,3 @@ The value of foo is ${d['dummy']['foo']}. Please notice this value was manipulat
 
 ## Templates can be splitted and included:
 <%include file="Sub.mako"/>
-
