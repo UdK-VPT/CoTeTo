@@ -7,12 +7,10 @@
 # This is an example of the usage of CoTeTo as a python module.
 # 
 
-import os
-import sys
-
 # check if we are running in the development folder -
 # just a hack to run this script without installing CoTeTo first -
 # usually not needed for users
+import os, sys
 parent = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 if os.path.isfile(os.path.join(parent, 'setup.py')):
     sys.path.insert(0, parent)
@@ -27,7 +25,7 @@ from CoTeTo.Controller import Controller
 con = Controller()
 
 # 3. choose a generator ...
-# a list of available generators can be printed with print(con.generators.keys())
+# (get a list of available generators with print(con.generators.keys()))
 gen = con.generators['Example01Mako::1.0']
 
 # 4. ... and execute it!
