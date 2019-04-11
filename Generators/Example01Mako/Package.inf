@@ -5,7 +5,7 @@
 # The GENERATOR section defines the main attributes of this generator.
 # The combination of name and version must be unique in your generator path.
 [GENERATOR]
-name = ExampleMako
+name = Example01Mako
 version = 1.0
 description = Example using the default mako engine
 author = Joerg Raedler jraedler@udk-berlin.de

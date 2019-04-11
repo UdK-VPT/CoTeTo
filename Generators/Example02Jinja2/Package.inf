@@ -5,7 +5,7 @@
 # The GENERATOR section defines the main attributes of this generator.
 # The combination of name and version must be unique in your generator path.
 [GENERATOR]
-name = ExampleJinja2
+name = Example02Jinja2
 version = 1.0
 description = Example using the alternative jinja2 engine
 author = Joerg Raedler jraedler@udk-berlin.de
