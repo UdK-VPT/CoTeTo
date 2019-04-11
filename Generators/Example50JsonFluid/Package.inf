@@ -1,6 +1,6 @@
 [GENERATOR]
-name = JsonFluid
-version = 0.1
+name = Example50JsonFluid
+version = 1.0
 description = Reads information about Equations of States for fluids from CoolProp json file and generates HelmholtzMedia Modelica input files.
 author = Matthis Thorade
 
