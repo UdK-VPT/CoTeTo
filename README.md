@@ -14,7 +14,7 @@ structures, optional **filters** to manipulate the data and **templates** to
 generate the formatted output. **Generators** are the documents of the CoTeTo
 system. A generator is a flexible container with filters, templates and
 additional information. A set of standard loaders is provided with CoTeTo, but
-containers can also store and use custom loaders.
+generators can also store and use custom loaders.
 
 CoTeTo manages a list of generators and data loaders.
 A generator is a package (contained in folder or a zip file) that contains
